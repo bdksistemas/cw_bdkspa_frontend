@@ -12,49 +12,18 @@ export class ApiServiceService  {
 
   }
 
-//Creamos una funcion para setear los headers
-  setHeaders(){
-    this.httpOptions = new HttpHeaders({
+  // Headers armados en cada petición: el token se lee al momento (antes se leía una vez al crear el servicio,
+  // o sea antes del login) y se le quitan las comillas con que se guarda en localStorage.
+  // Las credenciales de BD ya no viajan: el backend las resuelve en el servidor con el idcw del token.
+  get httpOptions(): HttpHeaders {
+    return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Allow-Control-Allow-Origin': '*',
-      'Authorization': 'Bearer ' + localStorage.getItem('token'),
-
-      'X-Client-Database': sessionStorage.getItem('bd_nombre')?.replace(/['"]+/g, '')!,
-      'X-Client-User': sessionStorage.getItem('bd_user')?.replace(/['"]+/g, '')!,
-      'X-Client-Password': sessionStorage.getItem('bd_psw')?.replace(/['"]+/g, '')!,
-      'X-Client-Host': sessionStorage.getItem('hosting')?.replace(/['"]+/g, '')!,
+      'Authorization': 'Bearer ' + (localStorage.getItem('token')?.replace(/['"]+/g, '') ?? ''),
     });
   }
 
-  //Token quitando comillas
-  token = localStorage.getItem('token')?.replace(/['"]+/g, '')!;
-  bd_nombre = sessionStorage.getItem('bd_nombre')?.replace(/['"]+/g, '')!;
-  bd_user = sessionStorage.getItem('bd_user')?.replace(/['"]+/g, '')!;
-  bd_psw = sessionStorage.getItem('bd_psw')?.replace(/['"]+/g, '')!;
-  hosting = sessionStorage.getItem('hosting')?.replace(/['"]+/g, '')!;
-
-  //Cremos los headers para las peticiones
-  httpOptions = new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Allow-Control-Allow-Origin': '*',
-    'Authorization': 'Bearer ' + this.token,
-    'X-Client-Database': this.bd_nombre,
-    'X-Client-User': this.bd_user,
-    'X-Client-Password': this.bd_psw,
-    'X-Client-Host': this.hosting,
-
-
-  });
-
-  login(data:any){
-    let url = 'http://127.0.0.1:8000/api/auth/login'
-    let httpOptions = new HttpHeaders({
-      'Content-Type': 'application/json',
-      // 'Authorization': 'Bearer ' + localStorage.getItem('token'),
-      'Allow-Control-Allow-Origin': '*'
-    });
-    return this.http.post(`${url}`, data, {headers: httpOptions})
-  }
+  // Se conserva porque los métodos la llaman; el getter httpOptions ya arma los headers.
+  setHeaders(){}
 
   getInitialData($sucursal: number = 1, $usuario: string = localStorage.getItem('id_usuario')!){
     this.setHeaders();

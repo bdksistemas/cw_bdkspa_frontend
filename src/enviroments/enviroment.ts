@@ -1,7 +1,7 @@
 // src/environments/environment.ts
 export const environment = {
-  DOMINIO_API_LOCAL : 'https://api.bdkspa.com/api/bdkspa/',
-  DOMINIO_API_LOGIN : 'https://api.bdkspa.com/api/auth/login',
+  DOMINIO_API_LOCAL : 'http://127.0.0.1:8000/api/bdkspa/',
+  DOMINIO_API_LOGIN : 'http://127.0.0.1:8000/api/auth/login',
 
   // DOMINIO_API_LOCAL : 'http://127.0.0.1:8000/api/bdkspa/',
   // DOMINIO_API_LOGIN : 'http://127.0.0.1:8000/api/auth/login',

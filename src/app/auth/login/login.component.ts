@@ -10,6 +10,9 @@ import { ApiServiceService } from '../../services/api-service.service';
 import { catchError, first, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
+// Solo se recuerdan ID y correo. La contraseña NUNCA se guarda aquí: de eso se encarga el administrador de contraseñas del navegador.
+export const LS_LOGIN_RECORDADO = 'cw_login_recordado';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -47,7 +50,34 @@ export class LoginComponent {
       ],
     ],
     cwpassword: ['', [Validators.required]],
+    recordar: [true],
   });
+
+  ngOnInit() {
+    try {
+      const guardado = JSON.parse(localStorage.getItem(LS_LOGIN_RECORDADO) ?? 'null');
+      if (guardado) {
+        this.loginForm.patchValue({ idcw: guardado.idcw, cwuser: guardado.cwuser });
+      }
+    } catch {
+      // localStorage no disponible o dato dañado: se ignora y el usuario captura sus datos
+    }
+  }
+
+  private recordarDatos() {
+    try {
+      if (this.loginForm.value.recordar) {
+        localStorage.setItem(LS_LOGIN_RECORDADO, JSON.stringify({
+          idcw: this.loginForm.value.idcw,
+          cwuser: this.loginForm.value.cwuser,
+        }));
+      } else {
+        localStorage.removeItem(LS_LOGIN_RECORDADO);
+      }
+    } catch {
+      // sin localStorage no se recuerda nada
+    }
+  }
 
   onSubmit() {
     //Para evitar que se presione el boton de login varias veces y se hagan varias peticiones a la API se deshabilita el boton
@@ -122,6 +152,7 @@ export class LoginComponent {
         btnLogin!.removeAttribute('disabled');
 
         if (res == true) {
+          this.recordarDatos();
           this.toast.success(
                 'Bienvenido ' + localStorage.getItem('nom_cw')!,
                 'Inicio de sesión exitoso',
@@ -138,7 +169,7 @@ export class LoginComponent {
           this.router.navigate(['/dashboard']);
         } else {
           this.toast.error(
-            'Verifica correctamente los campos.',
+            res?.error ?? 'Verifica correctamente los campos.',
             'Inténtalo nuevamente',
             {
               positionClass: 'toast-bottom-center',
