@@ -1,0 +1,137 @@
+  mat-form-field {
+    width: 100% !important;
+  }
+
+  .box-shadows {
+    box-shadow: 4px 3px 59px 16px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 4px 3px 59px 16px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 4px 3px 59px 16px rgba(0, 0, 0, 0.75);
+
+    box-shadow: 4px 3px 64px 5px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 4px 3px 64px 5px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 4px 3px 64px 5px rgba(0, 0, 0, 0.75);
+  }
+
+  .label-valid{
+
+    border-color: #0c740c !important;
+
+    /*** APLICAMOS LOS ESTILOS NATIVOS ***/
+    .mat-form-field-appearance-outline .mat-form-field-outline-start,
+    .mat-form-field-appearance-outline .mat-form-field-outline-gap,
+    .mat-form-field-appearance-outline .mat-form-field-outline-end {
+        border-color: #0c740c !important;
+    }
+    .mat-form-field-appearance-outline .mat-form-field-outline-thick-start, .mat-form-field-appearance-outline .mat-form-field-outline-thick-end {
+        border-color: #0c740c !important;
+    }
+
+    /*** APLICAMOS LOS ESTILOS NATIVOS ***/
+  }
+  .label-valid .mat-form-field-outline {
+    border-color: #0c740c !important;
+  }
+  .label-valid.mat-form-field-appearance-outline .mat-form-field-outline-start,
+  .label-valid.mat-form-field-appearance-outline .mat-form-field-outline-gap,
+  .label-valid.mat-form-field-appearance-outline .mat-form-field-outline-end {
+      border-color: #0c740c !important;
+  }
+  .label-valid.mat-form-field-appearance-outline .mat-form-field-outline-thick-start, .label-valid.mat-form-field-appearance-outline .mat-form-field-outline-thick-end {
+      border-color: #0c740c !important;
+  }
+  .label-valid:focus{
+    border-color: #0c740c !important;
+  }
+
+
+
+  .label-invalid{
+    color: #a30909 !important;
+    border-color: #a30909 !important;
+  }
+
+  .container-right {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/img/LOGIN-CW-BDKGYM.jpg');
+    background-color: rgba(255, 0, 0, 0);
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: brightness(0.4);
+    color: white;
+  }
+
+  .texto-encima {
+    position: relative;
+    background-color: rgba(255, 0, 0, 0);
+  }
+
+  .container-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .img-logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px;
+  }
+
+
+  @media (min-width: 768px) {
+    .gradient-form {
+      height: 100vh !important;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .gradient-custom-2 {
+      border-top-right-radius: .3rem;
+      border-bottom-right-radius: .3rem;
+    }
+  }
+  /* MEDIA QUERY 1024x800 */
+  @media (max-width: 1024px) {
+    .container-card{
+      /* padding: 50px !important; */
+    }
+    .img-logo{
+      /* width: 300px !important; */
+      margin:30px !important;
+    }
+
+    .container-right{
+      /* Le hacemos un padding ala imagen para que se vea mas alejada */
+      /* padding: 50px; */
+    }
+
+    .texto-encima h4{
+      /* padding: 50px; */
+      text-align: center;
+    }
+  }
+
+  /*** MEDIA QUERY PARA TELEFONOS ***/
+  @media (max-width: 568px) {
+    .container-card{
+      padding: 20px !important;
+    }
+    .img-logo{
+      width: 200px !important;
+    }
+    .texto-encima{
+      display: none;
+    }
+    .box-shadows {
+      box-shadow: 4px 3px 59px 16px rgba(0, 0, 0, 0);
+      -webkit-box-shadow: 4px 3px 59px 16px rgba(0, 0, 0, 0);
+      -moz-box-shadow: 4px 3px 59px 16px rgba(0, 0, 0, 0);
+    }
+  }

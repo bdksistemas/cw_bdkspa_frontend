@@ -1,0 +1,305 @@
+ <!-- Main content -->
+<div class="container-all" >
+
+  <div class="container-fluid container-charts container-info-box ">
+    <div class="info-box info-box-ventas ">
+      <span class="info-box-icon bg-info elevation-1"><i class="fas fa-money-bill "></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">VENTAS DEL DIA</span>
+        <span class="info-box-number">
+          {{datosIniciales.totalVentas | currency}}
+          <!-- <small>%</small> -->
+        </span>
+      </div>
+    </div>
+
+    <div class="info-box info-box-gastos">
+      <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-shopping-cart "></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">GASTOS Y COMPRAS</span>
+        <span class="info-box-number">{{datosIniciales.gastosYCompras | currency}}</span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+
+    <div class="info-box info-box-membresias">
+      <span class="info-box-icon bg-success elevation-1"><i class="fas fa-chart-line"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">INGRESOS DIARIOS</span>
+        <span class="info-box-number">{{datosIniciales.ingresosDiarios | currency}}</span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <div class="info-box info-box-inscripciones">
+      <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">TRATAMIENTOS ACTIVOS</span>
+        <span class="info-box-number">{{datosIniciales.serviciosActivos}}</span>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+    <div class="info-box info-box-sucursales">
+      <span class="info-box-icon bg-blue elevation-1"><i class="fas fa-store"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">SUCURSALES</span>
+        <select class="form-select" (change)="cambioSucusal($event)">
+          @for (item of sucursales; track $index) {
+            <option value="{{item.sucursal}}">{{item.empresa}} </option>
+          }
+        </select>
+      </div>
+      <!-- /.info-box-content -->
+    </div>
+  </div>
+
+
+
+
+  <div class=" container-fluid container-charts">
+    <div class="card " id="CdoughnutChart">
+      <div class="card-header card-header-azul ">
+        <h3 class="card-title">TRATAMIENTOS ACTIVOS</h3>
+
+        <div class="card-tools">
+
+        </div>
+      </div>
+      <div class="card-body" >
+        <canvas id="doughnutChart" class="chart-canvas"></canvas>
+      </div>
+      <!-- /.card-body -->
+    </div>
+
+    <div class="card ">
+      <div class="card-header card-header-verde">
+        <h3 class="card-title">VENTAS DIARIAS ULTIMOS 10 DIAS</h3>
+
+        <div class="card-tools">
+
+        </div>
+      </div>
+      <div class="card-body"  id="cardcuentasAbiertas" >
+        <canvas id="inscripcionesDiarias" class="canvas-chart" ></canvas>
+      </div>
+      <!-- /.card-body -->
+    </div>
+
+  </div>
+
+
+  <div class="container-fluid container-charts ventasPorHora" >
+    <div class="card ">
+      <div class="card-header card-header-rojo">
+        <h3 class="card-title">CITAS (ULTIMOS 10 DIAS - ACTUAL)</h3>
+
+        <div class="card-tools">
+
+        </div>
+      </div>
+      <div class="card-body"  id="CventasPorHora" style="display: block !important;" >
+        <table class="table table-striped table-valign-middle" style="    width: 100% !important;
+        height: 100% !important;
+        overflow-x: scroll;
+        overflow-y: scroll;
+        display: flow-root;
+    ">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Tratamiento</th>
+              <th>Sala</th>
+              <th>Empleado</th>
+              <th>Fecha/Hora</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+           @for (item of asistenciasHoraData; track $index) {
+            <tr >
+              <td>
+                <small>
+                  <b>{{item.nomcliente}}</b>
+                </small>
+              </td>
+              <td>
+                <small>
+                  {{item.nomproducto}}
+                </small>
+              </td>
+              <td>
+                <small>{{item.nomsala}}</small>
+              </td>
+              <td>
+                <small>
+                  <span>
+                    {{item.nomempleado}}
+
+                  </span>
+                </small>
+              </td>
+              <td>
+                <small>
+                  <span>
+                    {{item.fecha | date: 'dd/MM/yyyy hh:mm a'}}
+
+                  </span>
+                </small>
+              </td>
+            </tr>
+           }
+
+          </tbody>
+        </table>
+        <!-- <canvas id="asistenciasHoraChart" class="canvas-chart" ></canvas> -->
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <div class="card ">
+      <div class="card-header card-header-amarillo">
+        <h3 class="card-title">TOP 10 | PRODUCTOS MAS VENDIDOS</h3>
+
+        <div class="card-tools">
+
+        </div>
+      </div>
+      <div class="card-body"  id="Cardtop10Products" >
+        <canvas id="top10Products" class="canvas-chart" ></canvas>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+
+
+  <div class="container-fluid container-charts ventasPorDia" >
+    <div class="card ">
+      <div class="card-header card-header-naranja">
+        <h3 class="card-title">CUENTAS ABIERTAS</h3>
+
+        <div class="card-tools">
+
+        </div>
+      </div>
+      <div class="card-body"  id="CventasPorHora" style="display: block !important;" >
+        <table class="table table-striped table-valign-middle" style="    width: 100% !important;
+        height: 100% !important;
+        overflow-x: scroll;
+        overflow-y: scroll;
+        display: flow-root;
+    ">
+          <thead style="width: 100% !important; ">
+            <tr>
+              <th>Cliente</th>
+              <th>Hora</th>
+              <th>Tiempo</th>
+              <th>Importe</th>
+
+            </tr>
+          </thead>
+          <tbody style=" width: 100% !important; ">
+
+           @for (item of metodosDePagoData; track $index) {
+            <tr >
+              <td>
+                <small>
+                  <b>{{item.nomcliente}}</b>
+                </small>
+              </td>
+              <td>
+                <small>
+                  {{item.feccta}}
+                </small>
+              </td>
+              <td>
+                <small>{{item.tiempo_abierto}}</small>
+              </td>
+              <td>
+                <small>
+                  <span>
+                    {{item.total | currency}}
+                  </span>
+                </small>
+              </td>
+              <!-- <td>
+                <small>
+                  <span>
+                    {{item.nomempleado}}
+                  </span>
+                </small>
+              </td> -->
+            </tr>
+           }
+
+          </tbody>
+        </table>
+        <!-- <canvas id="asistenciasHoraChart" class="canvas-chart" ></canvas> -->
+      </div>
+      <!-- <div class="card-body"  id="CardmetodosDePago" >
+        <canvas id="metodosDePago" class="canvas-chart" ></canvas>
+      </div> -->
+      <!-- /.card-body -->
+    </div>
+
+    <div class="card ">
+      <div class="card-header">
+        <h3 class="card-title">VENTAS POR CATEGORIAS</h3>
+
+        <div class="card-tools">
+
+        </div>
+      </div>
+      <div class="card-body"  id="cardventasCategoria" >
+        <canvas id="ventasCategoria" class="canvas-chart" ></canvas>
+      </div>
+      <!-- /.card-body -->
+    </div>
+
+  </div>
+
+
+  <div class="container-fluid container-charts ventasPorDia" >
+
+    <div class="card ">
+      <div class="card-header card-header-rosa">
+        <h3 class="card-title">SERVICIOS POR SALA (A 10 DIAS</h3>
+
+        <div class="card-tools">
+
+        </div>
+      </div>
+      <div class="card-body"  id="CardmventasPorMesero" >
+        <canvas id="tratamientoSala" class="canvas-chart" ></canvas>
+      </div>
+    </div>
+
+    <div class="card ">
+      <div class="card-header card-header-amarillo-claro">
+        <h3 class="card-title">SERVICIOS POR EMPLEADO (A 10 DIAS)</h3>
+
+        <div class="card-tools">
+
+        </div>
+      </div>
+      <div class="card-body"  id="CardmventasPorMesero" >
+        <canvas id="sociosPorClase" class="canvas-chart" ></canvas>
+      </div>
+    </div>
+  </div>
+
+  <app-banner-publicitario ></app-banner-publicitario>
+<div style="margin-top: 200px;" >
+  <hr>
+</div>
+<!-- <app-footer></app-footer> -->
+
+</div>
+
+
+
+
+

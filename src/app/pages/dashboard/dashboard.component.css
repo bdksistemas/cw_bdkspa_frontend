@@ -1,0 +1,372 @@
+
+/**! Importante poner el height en 900 para que no se pierda el estilo en las pantallas */
+
+.container-all{
+  display: block;
+ height: 100% !important;
+ overflow: auto !important;
+
+}
+.carousel-item img {
+  width: 100%;
+  height: auto;
+}
+.container-charts{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+}
+.card{
+  width: 800px !important;
+  height: 400px !important;
+  margin: 50px;
+
+  /* box-shadow: 0px 3px 30px -3px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 3px 30px -3px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 3px 30px -3px rgba(0,0,0,0.75); */
+}
+.card-header{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  color: #a30909 !important;
+
+  padding: 10px !important;
+  background-color: white !important;
+
+}
+.card-title{
+  text-shadow: #a30909;
+  font-size: 22px !important;
+  font-weight: bold !important;
+  text-shadow: -1px 4px 13px rgba(0,0,0,0.29);
+}
+
+.canvas-chart{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.card-body{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+}
+.chart-canvas{
+  width: 300px !important; height: auto !important;
+}
+.container-info-box{
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding-left: auto !important;
+  padding-right: auto ;
+}
+.info-box{
+  width: 18% !important;
+  margin: 20px 10px 20px 10px !important;
+  padding: 15px !important;
+}
+.info-box-content{
+
+}
+.ventasMesero{
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 100px;
+}
+.ventasMesero .card{
+  width: 1500px !important;
+  height: 600px !important;
+}
+
+@media (max-width: 1024px) {
+  .container-info-box{
+    flex-wrap: wrap;
+  }
+  .info-box{
+    width: 100% !important;
+    margin: 10px 10px 10px 10px !important;
+  }
+
+
+}
+
+
+
+/*? Media querys para los telefonos */
+@media (max-width: 768px) {
+  .container-all{
+    padding: 10px !important;
+  }
+  .container-charts{
+    padding: 10px;
+  }
+  .card{
+    width: 100% !important; height: 100% !important;
+    margin: 20px !important;
+    box-shadow: 0px 3px 30px -3px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 3px 30px -3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 3px 30px -3px rgba(0,0,0,0.75);
+  }
+  .card-title{
+    text-shadow: #a30909;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    text-shadow: -1px 4px 13px rgba(0,0,0,0.29);
+  }
+
+  .container-charts{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+  }
+  .container-info-box{
+    margin-top: 20px !important;
+    padding-left: 10px !important;
+    padding-right: 10px;
+    flex-direction: column-reverse;
+  }
+  .info-box{
+    width: 100% !important;
+    margin: 10px 10px 10px 10px !important;
+
+  }
+
+  .ventasMesero .card{
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+
+
+/* ESTILOS NUEVOS PARA EL DASHBOARD */
+.info-box-content{
+  color: white;
+  font-weight: bold;
+ }
+
+.info-box-ventas{
+  background-color: #17a3b8;
+  color: white;
+}
+
+.info-box-gastos{
+  background-color: #dc3545 !important;
+  color: white;
+}
+.info-box-membresias{
+  background-color: #28a745 !important;
+  color: white;
+
+}
+.info-box-inscripciones{
+  background-color: #ffc107 !important;
+  color: white;
+}
+.info-box-sucursales{
+  background-color: #007bff !important;
+  color: white;
+}
+
+.info-box-footer {
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-top: 1px solid #ddd;
+  text-align: center;
+}
+
+.info-box-footer .footer-text {
+  font-size: 14px;
+  color: #333;
+}
+
+
+/* Cambios en el header de las cards */
+.card-header{
+  display: flex !important;
+  justify-content: start !important;
+  align-items: start !important;
+  color: white !important;
+  padding: 15px !important;
+  background-color: #171718 !important;
+}
+.card-header-rojo{
+  background-color: rgb(224, 22, 22) !important;
+}
+.card-header-verde{
+  background-color: rgb(40, 167, 69) !important;
+}
+.card-header-azul{
+  background-color: rgb(0, 123, 255) !important;
+}
+.card-header-amarillo{
+  background-color: #ffc107 !important;
+}
+.card-header-naranja{
+  background-color: rgb(236, 110, 6) !important;
+}
+.card-header-morado{
+  background-color: #5f1bdf !important;
+}
+.card-header-rosa{
+  background-color: rgba(255, 99, 132, 1) !important;
+}
+.card-header-amarillo-claro{
+  background-color: #eeff00 !important;
+}
+.card-title{
+  text-shadow: #a30909;
+  font-size: 18px !important;
+  font-weight: bold !important;
+  text-shadow: -1px 4px 13px rgba(0,0,0,0.29);
+  margin-left: 10px;
+}
+
+
+
+/*? Media querys para los telefonos */
+@media (max-width: 700px) {
+  .container-all{
+    padding: 10px !important;
+  }
+  .container-charts{
+    padding: 10px;
+  }
+  .card{
+    width: 100% !important;
+    height: 400px !important;
+    margin: 10px !important;
+  }
+  .card-title{
+    text-shadow: #a30909;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    text-shadow: -1px 4px 13px rgba(0,0,0,0.29);
+  }
+
+  .container-charts{
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+
+  }
+  .container-info-box{
+    margin-top: 20px !important;
+    /* padding-left: 10px !important; */
+    padding-right: 10px;
+    flex-direction: column-reverse;
+  }
+  .pares{
+    flex-direction: column;
+
+  }
+  .info-box{
+    width: 100% !important;
+    margin: 10px 10px 10px 10px !important;
+
+  }
+
+  .ventasMesero .card{
+    width: 700px !important;
+    height: auto !important;
+  }
+}
+
+
+/* Mediaquery para IPAD 820x1180 */
+@media (max-width: 1000px)  {
+
+  .container-charts{
+    /* width: 100%; */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+  }
+  .pares{
+    width: 100% !important;
+    display: flex !important;
+
+  }
+  .container-info-box{
+    width: 100% !important;
+    flex-wrap: wrap;
+    padding: 25px !important;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
+  .info-box{
+    width: 100% !important;
+
+  }
+
+  .ventasMesero{
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 100px;
+  }
+  .ventasMesero .card{
+    width: 700px !important;
+    height: 600px !important;
+  }
+
+
+}
+@media (max-width: 1240px)  {
+  .pares{
+    width: 100% !important;
+    display: flex !important;
+
+  }
+  .container-info-box{
+    width: 100% !important;
+    flex-wrap: wrap;
+    padding: 25px !important;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
+  .info-box{
+    width: 100% !important;
+
+  }
+
+}
+
+
+@media (max-width: 400px)  {
+  .card{
+    width: 300px !important;
+  }
+
+  .ventasMesero .card{
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+@media (max-width: 700px)  {
+  .canvas-chart{
+
+    height: auto !important;
+  }
+  .ventasMesero .card{
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+.legend-container {
+  max-height: 450px; /* Ajusta el valor según lo necesites */
+  overflow-y: auto;
+}

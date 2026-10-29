@@ -1,0 +1,157 @@
+<div class="container-all">
+
+
+  <div class="mat-elevation-z8">
+    <app-titulo-pagina [titulo]="titulo"></app-titulo-pagina>
+
+    <div class="demo-button-container">
+      <mat-form-field class="buscador-ticket buscador-item">
+        <input matInput (keyup)="applyFilter($event.target)" placeholder="Buscar datos:">
+      </mat-form-field>
+
+      <div class="">
+        <button (click)="downloadPDF()" mat-raised-button class="botones-acciones rojo" >
+          PDF <i class="fas fa-download ml-3"></i>
+        </button>
+      </div>
+      <div class="">
+        <button (click)="downloadExcel()" mat-raised-button class="botones-acciones verde" [color]="verde">
+          EXCEL <i class="fas fa-download ml-3"></i>
+        </button>
+      </div>
+
+      <div class="form-floating buscador-ticket">
+        <select (change)="cambioCategoria($event)" class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
+          <option value="0">TODAS LAS CATEGORÍAS</option>
+          @for (item of categorias; track $index) {
+
+            @if(item.nomcategoria === '')
+            {
+              <option value="{{item.categoria}}" >SIN CATEGORIA</option>
+
+            }@else{
+              <option value="{{item.categoria}}" >{{item.nomcategoria}} </option>
+
+            }
+          }
+        </select>
+        <label for="floatingSelect">Selecciona Categoria</label>
+      </div>
+
+      <div class="form-floating buscador-ticket">
+          <input
+            type="date"
+            class="form-control box-shadow-rojo borde-rojo"
+            [(ngModel)]="fechaInicial"
+            (change)="validarFechaInicial($event.target)"
+            >
+          <label for="floatingSelect">Fecha Inicial</label>
+      </div>
+
+      <div class="form-floating buscador-ticket">
+        <input type="date"
+          class="form-control box-shadow-rojo borde-rojo"
+          [(ngModel)]="fechaFinal"
+          (change)="validarFechaFinal($event.target)"
+
+          >
+        <label for="floatingSelect">Fecha Final</label>
+      </div>
+
+      <div class="form-floating buscador-ticket">
+        <select (change)="cambioSucusal($event)" class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
+          @for (item of sucursales; track $index) {
+            <option value="{{item.sucursal}}">{{item.empresa}} </option>
+          }
+        </select>
+        <label for="floatingSelect">Selecciona Sucursal</label>
+      </div>
+      <!-- <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Mostrar Cancelados
+        </label>
+      </div> -->
+    </div>
+
+    <table id="my-table" mat-table [dataSource]="dataSource" matSort >
+
+      <!-- DEFINIMOS LAS SOLUMNAS DE d -->
+
+      <ng-container matColumnDef="Ticket">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Ticket </th>
+        <td mat-cell *matCellDef="let row"> {{row.Ticket}} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+
+      </ng-container>
+
+      <ng-container matColumnDef="Fecha">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha/Hora </th>
+        <td mat-cell *matCellDef="let row"> {{row.Fecha | date:'dd/MM/yyyy HH:mm:ss a' }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+
+      </ng-container>
+      <ng-container matColumnDef="NombreCategoria">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Categoria</th>
+        <td mat-cell *matCellDef="let row"> {{row.NombreCategoria}} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+
+      </ng-container>
+      <ng-container matColumnDef="NombreCliente">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+        <td mat-cell *matCellDef="let row"> {{row.NombreCliente }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+
+      </ng-container>
+      <ng-container matColumnDef="Importe">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Importe </th>
+        <td mat-cell *matCellDef="let row"> {{row.Importe | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+
+      </ng-container>
+      <ng-container matColumnDef="Descuento">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descuento </th>
+        <td mat-cell *matCellDef="let row"> {{row.Descuento | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ISR">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ISR </th>
+        <td mat-cell *matCellDef="let row"> {{row.ISR | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <ng-container matColumnDef="Total">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Total </th>
+        <td mat-cell *matCellDef="let row"> {{row.Total | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <ng-container matColumnDef="Abonado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Abonado </th>
+        <td mat-cell *matCellDef="let row"> {{row.Abonado | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <ng-container matColumnDef="Saldo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Saldo </th>
+        <td mat-cell *matCellDef="let row"> {{row.Saldo | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+      <ng-container matColumnDef="UltimoPago">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> UltimoPago </th>
+        <td mat-cell *matCellDef="let row"> {{row.UltimoPago  }} </td>
+        <td mat-footer-cell *matFooterCellDef>  </td>
+      </ng-container>
+
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+
+    </table>
+
+    <mat-paginator pageSize="10" [pageSizeOptions]="[5, 10, 25, 100]" class="items-center" ></mat-paginator>
+  </div>
+
+
+  <app-banner-publicitario ></app-banner-publicitario>
+
+</div>

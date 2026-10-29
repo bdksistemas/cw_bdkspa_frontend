@@ -1,0 +1,241 @@
+
+
+html, body { height: 100%; margin: 0;  overflow: hidden;}
+
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.negative {
+  color: rgb(255, 12, 12);
+  font-weight: bold;
+}
+/* .container-all{
+  margin-top: 40px;
+} */
+.mat-elevation-z8 {
+  margin-top: 40px !important;
+}
+/* Aplica la transición en cualquier elemento con la clase "efecto-hover" */
+.efecto-hover {
+  overflow: hidden !important; /* Oculta el contenido que se desborda del contenedor */
+
+  transition-duration: 0.2s; /* Duración de la transición */
+
+}
+
+/* Aplica la elevación al pasar el cursor sobre cualquier elemento con la clase "efecto-hover" */
+.efecto-hover:hover {
+  overflow-y: hidden !important;
+  transform: scale(1.05); /* Escala el elemento al 105% */
+}
+
+.color-primario {
+  color: white !important; /* Color primario */
+  /*background-color: #161616 !important;  Color de fondo primario */
+  background-color: #000000 !important;  /* Color de fondo primario */
+}
+
+
+/* Estilo del scrollbar */
+::-webkit-scrollbar {
+  width: 8px !important; /* Ancho del scrollbar */
+}
+
+/* Estilo del pulgar del scrollbar */
+::-webkit-scrollbar-thumb {
+  background-color: rgb(179, 8, 8) !important; /* Color del pulgar */
+  border-radius: 6px !important; /* Borde redondeado */
+}
+
+:root {
+  --verde: #0c740c; /* Puedes usar el formato hexadecimal */
+}
+
+.borde-rojo{
+  /* border: 1px solid rgba(255, 0, 0, 0.5) !important; */
+}
+.borde-rojo:focus{
+  border: 1px solid #a30909  !important;
+
+}
+.box-shadow-rojo:focus{
+  box-shadow: 0 0 5px 0 #a30909  !important;
+}
+
+.toast-center {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
+
+
+.center-cell {
+  text-align: center;
+}
+.padding-left {
+  padding-left: 10px; /* Ajusta el valor según tus necesidades */
+}
+
+/* Aplica el padding a la primera columna del encabezado, cuerpo y pie de la tabla */
+/* Aplica el estilo al encabezado, cuerpo y pie de la primera columna */
+#my-table th.mat-header-cell:first-child,
+#my-table td.mat-cell:first-child,
+#my-table td.mat-footer-cell:first-child {
+  text-align: center !important;
+}
+
+
+
+
+
+
+/*! ESTILOS PARA TODAS LAS TABLAS Y REPORTES XD */
+
+.container-all{
+  width: 100% !important;
+  height: 100% !important;
+  overflow-y: scroll !important;
+  padding-top: 20px;
+   padding-bottom: 100px;
+  padding-left: 100px;
+  padding-right: 100px;
+
+ }
+
+ table {
+   width: 100%;
+ }
+  option:hover {
+   background-color:  #a30909 !important; /* Cambiar el color al pasar el mouse */
+ }
+ /* select:focus option {
+   background-color: #a30909 !important;
+   color: white !important;
+ } */
+
+ td.mat-column-star {
+   width: 20px;
+   padding-right: 8px;
+ }
+
+ th.mat-column-position, td.mat-column-position {
+   padding-left: 8px;
+   --color: #a3090994 !important;
+
+ }
+
+ .mat-mdc-table-sticky-border-elem-right {
+   border-left: 1px solid #e0e0e0;
+ }
+
+ .mat-mdc-table-sticky-border-elem-left {
+   border-right: 1px solid #e0e0e0;
+ }
+
+ .items-center{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+ .mat-elevation-z8 {
+   overflow-x: auto !important;
+  }
+  tr.mat-mdc-footer-row {
+   font-weight: bold;
+
+
+ }
+
+ .mat-mdc-table-sticky {
+   border-top: 1px solid #e0e0e0;
+ }
+ .demo-button-container{
+   width: 100% !important;
+   display: flex;
+   justify-content: start;
+   align-items: center;
+   flex-direction: row;
+   flex-wrap: wrap;
+ }
+ .botones-acciones{
+   width: 150px;
+   padding: 26px;
+   margin: 10px;
+ }
+ .buscador-ticket{
+   width: 300px;
+   margin: 10px;
+ }
+
+ .rojo{
+   --color:white !important;
+   --background-color: #a30909 !important;
+   color: white !important;
+   background-color: #a30909 !important;
+ }
+ .verde{
+   background-color: #0c7e0f !important;
+   color: white !important;
+   --background-color: #0c7e0f !important;
+   --color: white !important;
+ }
+
+
+ .mat-header-row {
+   --background-color: #005173 !important;
+ }
+ /*? CAMBIAR COLOR DE LAS CELDAS DE LA TABLA  */
+ th.mat-sort-header {
+   color: #a30909 !important;
+ }
+
+ :host ::ng-deep .mat-sort-header-arrow {
+   color: #a30909 !important;
+ }
+
+ .buscador-item{
+   padding-top: 10px !important;
+ }
+
+ /* CREAMOS EL MEDIAQUERY PARA LOS DISPOSITIVOS MOVILES */
+ @media (max-width: 646px) {
+   .mat-elevation-z8 {
+     overflow-x: scroll !important;
+    }
+    /* .demo-button-container{
+     overflow-x: scroll !important;
+
+    } */
+   .container-all{
+     padding-left: 10px;
+     padding-right: 10px;
+     padding-bottom: 250px !important;
+     overflow-y: scroll !important;
+   }
+   .mat-form-field {
+     font-size: 12px;
+   }
+   .mat-column-star {
+     width: 10px;
+     padding-right: 8px;
+   }
+   th.mat-column-position, td.mat-column-position {
+     padding-left: 8px;
+   }
+   .items-center{
+     display: flex;
+     justify-content: center;
+     align-items: center;
+   }
+   .demo-button-container{
+     width: 100% !important;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     flex-direction: column;
+   }
+   .botones-acciones{
+     width: 300px;
+     margin: 10px;
+   }
+ }
+
+

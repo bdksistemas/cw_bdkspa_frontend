@@ -1,0 +1,19 @@
+/* Estilos para telefonos */
+
+@media (max-width: 767px) {
+  .titulo-pagina {
+    font-size: 10px;
+  }
+  .text-start{
+    text-align: center !important;
+  }
+}
+
+@media (max-width: 567px) {
+  .titulo-pagina {
+    font-size: 10px;
+  }
+  .text-start{
+    text-align: center !important;
+  }
+}

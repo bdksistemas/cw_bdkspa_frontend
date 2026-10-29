@@ -1,0 +1,175 @@
+
+    <mat-sidenav-container class="sidenav-container  " >
+      <!-- Poner "openeed dentro del mat-sidenav para poder dejarla abierta siempre" -->
+      <mat-sidenav
+        #drawer
+        class="sidenav color-primario  "
+        style="width: 300px; padding: 5px;"
+        #sidenav
+
+
+      >
+        <mat-toolbar class="color-primario " style="
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 0;
+      ">
+          <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+          "
+        >
+          <img
+            src="./assets/img/LOGO_BDKSPA_GRALBLANCO.png"
+            alt="AdminLTE Logo"
+            style="opacity: 0.8; width: 150px"
+          />
+        </div>
+
+
+
+
+
+        </mat-toolbar>
+        <!-- CREAMOS UN NAV LIST CON DROPDWON CADA UNO -->
+        <hr class="hr-item">
+
+        <div class="user-panel ">
+          <!-- <div class="image">
+            <img
+              src="./assets/dist/img/user2-160x160.jpg"
+              class="img-circle elevation-2"
+              alt="User Image"
+            />
+          </div> -->
+          <div class="info-user">
+            <a class="text-user-name">{{ nombreUsuario }}</a>
+          </div>
+        </div>
+
+
+
+        <hr class="hr-item">
+  <!-- Panel de Inicio -->
+          <!-- <mat-expansion-panel class="items-sidenav"
+                               [expanded]="expandedPanel === 0"
+                               (opened)="setExpandedPanel(0)"
+                               (closed)="setExpandedPanel(null)">
+            <mat-expansion-panel-header>
+              <mat-panel-title routerLink="/dashboard/Inicio" routerLinkActive="active">
+                <i class="fas fa-tachometer-alt ml-1" style="margin-right: 10px;"></i>
+                INICIO
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <mat-list>
+              <mat-list-item class="submenu-item" routerLink="/dashboard/Inicio" routerLinkActive="active"
+                             style="cursor: pointer; padding: 0; margin: 0; margin-bottom: 10px; padding-left: 15px;"
+                             (click)="sidenav.close()">
+                <span mat-line>Ver Dashboard</span>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel> -->
+
+          <!-- Otros Paneles del Menú -->
+
+        <mat-nav-list>
+
+          <ng-container *ngFor="let item of menuItems; let i = index">
+            <mat-expansion-panel *ngIf="submenus[item.titulo]" class="items-sidenav"
+                                 [expanded]="expandedPanel === i + 1"
+                                 (opened)="setExpandedPanel(i + 1)"
+                                 (closed)="setExpandedPanel(null)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <i class="{{ item.icono }}" style="margin-right: 10px;"></i>
+                  {{ item.titulo }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <mat-list>
+                <mat-list-item class="submenu-item" *ngFor="let subMenuItem of item.submenu" routerLink="{{ subMenuItem.url }}"
+                               style="cursor: pointer; padding: 0; margin: 0; margin-bottom: 10px; padding-left: 15px;"
+                               (click)="sidenav.close()">
+                  <span mat-line>{{ subMenuItem.titulo }}</span>
+                </mat-list-item>
+              </mat-list>
+            </mat-expansion-panel>
+          </ng-container>
+
+ <!-- Panel de Configuración/Salir -->
+          <mat-expansion-panel class="items-sidenav"
+                               [expanded]="expandedPanel === menuItems.length + 1"
+                               (opened)="setExpandedPanel(menuItems.length + 1)"
+                               (closed)="setExpandedPanel(null)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="fas fa-cogs ml-1" style="margin-right: 10px;"></i>
+                CONFIGURACIÓN
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item class="submenu-item" (click)="logout()" style="cursor: pointer; padding: 0; margin: 0; margin-bottom: 10px; padding-left: 15px;"
+                             (click)="sidenav.close()">
+                <span mat-line>Salir</span>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+        </mat-nav-list>
+
+
+      </mat-sidenav>
+
+      <mat-sidenav-content >
+        <mat-toolbar class="color-primario toolbar-principal">
+          <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" >
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          </button>
+          <div
+          style="
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+          "
+        >
+          <img
+            src="./assets/img/LOGO_BDKSPA_GRALBLANCO.png"
+            alt="AdminLTE Logo"
+            style="opacity: 0.8; width: 150px"
+          />
+        </div>
+        </mat-toolbar>
+        <div class="router-container">
+          <router-outlet></router-outlet>
+          <!-- <app-footer></app-footer> -->
+
+        </div>
+        <div class=" footer-toolbar main-footer">
+          <div class="float-right d-none d-sm-block">
+          </div>
+          <strong style="color: white;" class="letras-footer"><a href="https://www.bdksistemas.com.mx/" target="_blank" style="color: #b90d0d;" class="letras-footer">BDKSISTEMAS S.A. DE C.V</a> | Soporte Técnico: (+52) 81 4171 6458 | Lun a Vie de 9 am a 7:45 pm, Sábados de 9 am a 5:45 pm</strong>
+        </div>
+
+
+      </mat-sidenav-content>
+
+
+
+
+    </mat-sidenav-container>
+
+
+
