@@ -16,7 +16,7 @@ ng build
 
 ## Estado
 
-- El código heredado es de BDKTINT (menú y reportes de lavandería), no de SPA.
+- Menú con reportes de SPA (agenda, tratamientos, ventas, clientes, almacén, gastos); solo se conservan los del menú actual. Restos de GYM sin menú: socios-clase, socios-asistencia, socios-inscripciones, ventas-detallado, suscripciones-vencidas, ventas-productos-cancelados.
 - `auth.service.ts` y `api-service.service.ts` guardan credenciales en `sessionStorage` y mandan headers `X-Client-*`, con URL `127.0.0.1` fija: se corrige en la Fase 3.
 - Por limpiar en la Fase 2: `pages/heroes`, `services/heroes.service.ts` (plantilla).
 - `.gitignore` usa `/dist` (con barra) para no ignorar `src/assets/dist/`.
