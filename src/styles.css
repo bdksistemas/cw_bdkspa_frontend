@@ -1,241 +1,211 @@
-
-
-html, body { height: 100%; margin: 0;  overflow: hidden;}
-
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.negative {
-  color: rgb(255, 12, 12);
-  font-weight: bold;
-}
-/* .container-all{
-  margin-top: 40px;
-} */
-.mat-elevation-z8 {
-  margin-top: 40px !important;
-}
-/* Aplica la transición en cualquier elemento con la clase "efecto-hover" */
-.efecto-hover {
-  overflow: hidden !important; /* Oculta el contenido que se desborda del contenedor */
-
-  transition-duration: 0.2s; /* Duración de la transición */
-
-}
-
-/* Aplica la elevación al pasar el cursor sobre cualquier elemento con la clase "efecto-hover" */
-.efecto-hover:hover {
-  overflow-y: hidden !important;
-  transform: scale(1.05); /* Escala el elemento al 105% */
-}
-
-.color-primario {
-  color: white !important; /* Color primario */
-  /*background-color: #161616 !important;  Color de fondo primario */
-  background-color: #000000 !important;  /* Color de fondo primario */
-}
-
-
-/* Estilo del scrollbar */
-::-webkit-scrollbar {
-  width: 8px !important; /* Ancho del scrollbar */
-}
-
-/* Estilo del pulgar del scrollbar */
-::-webkit-scrollbar-thumb {
-  background-color: rgb(179, 8, 8) !important; /* Color del pulgar */
-  border-radius: 6px !important; /* Borde redondeado */
-}
+/* Sistema de diseño: ver DESIGN-SYSTEM-PORTABLE.md (raíz del proyecto).
+   Un solo acento (--accent). Se carga DESPUÉS de bootstrap/adminlte para poder sobreescribirlos. */
 
 :root {
-  --verde: #0c740c; /* Puedes usar el formato hexadecimal */
+  --accent: #a30909;
+  --accent-dark: #7d0707;
+  --ink: #111218;
+  --ink-2: #191a22;
+  --paper: #f7f7f8;
+  --white: #ffffff;
+  --muted: #666873;
+  --line: #e3e3e7;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+
+  --bs-body-font-family: var(--font-body);
+  --bs-body-color: var(--ink);
+
+  /* Material: radios y rellenos de campos */
+  --mdc-outlined-text-field-container-shape: 6px;
+  --mdc-outlined-text-field-outline-color: var(--line);
+  --mdc-outlined-text-field-hover-outline-color: var(--muted);
+  --mdc-filled-text-field-container-color: var(--paper);
 }
 
-.borde-rojo{
-  /* border: 1px solid rgba(255, 0, 0, 0.5) !important; */
-}
-.borde-rojo:focus{
-  border: 1px solid #a30909  !important;
+html, body { height: 100%; margin: 0; overflow: hidden; }
 
-}
-.box-shadow-rojo:focus{
-  box-shadow: 0 0 5px 0 #a30909  !important;
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--paper);
+  color: var(--ink);
 }
 
-.toast-center {
-  margin-top: auto !important;
-  margin-bottom: auto !important;
-}
+.negative { color: var(--accent); font-weight: bold; }
 
+/* Scrollbar neutro y delgado */
+::-webkit-scrollbar { width: 6px !important; height: 6px !important; }
+::-webkit-scrollbar-thumb { background-color: rgba(17, 18, 24, 0.25) !important; border-radius: 6px !important; }
+::-webkit-scrollbar-thumb:hover { background-color: rgba(17, 18, 24, 0.4) !important; }
 
-.center-cell {
-  text-align: center;
-}
-.padding-left {
-  padding-left: 10px; /* Ajusta el valor según tus necesidades */
-}
+.color-primario { color: #fff !important; background-color: var(--ink) !important; }
 
-/* Aplica el padding a la primera columna del encabezado, cuerpo y pie de la tabla */
-/* Aplica el estilo al encabezado, cuerpo y pie de la primera columna */
-#my-table th.mat-header-cell:first-child,
-#my-table td.mat-cell:first-child,
-#my-table td.mat-footer-cell:first-child {
-  text-align: center !important;
-}
+.efecto-hover { overflow: hidden !important; transition-duration: 0.2s; }
+.efecto-hover:hover { overflow-y: hidden !important; transform: scale(1.05); }
 
+.toast-center { margin-top: auto !important; margin-bottom: auto !important; }
+.center-cell { text-align: center; }
+.padding-left { padding-left: 10px; }
+.items-center { display: flex; justify-content: center; align-items: center; }
 
-
-
-
-
-/*! ESTILOS PARA TODAS LAS TABLAS Y REPORTES XD */
-
-.container-all{
+/* ---------- Contenedor de cada pantalla ---------- */
+.container-all {
   width: 100% !important;
   height: 100% !important;
-  overflow-y: scroll !important;
-  padding-top: 20px;
-   padding-bottom: 100px;
-  padding-left: 100px;
-  padding-right: 100px;
+  overflow-y: auto !important;
+  padding: 24px 32px 80px;
+}
 
- }
+/* ---------- Títulos ---------- */
+app-titulo-pagina h5 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
 
- table {
-   width: 100%;
- }
-  option:hover {
-   background-color:  #a30909 !important; /* Cambiar el color al pasar el mouse */
- }
- /* select:focus option {
-   background-color: #a30909 !important;
-   color: white !important;
- } */
+/* ---------- Cards ---------- */
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
 
- td.mat-column-star {
-   width: 20px;
-   padding-right: 8px;
- }
+/* Contenedor de tabla/reporte */
+.mat-elevation-z8 {
+  background: var(--white) !important;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
+  margin-top: 0 !important;
+  padding: 16px 24px 24px;
+  overflow-x: auto !important;
+}
 
- th.mat-column-position, td.mat-column-position {
-   padding-left: 8px;
-   --color: #a3090994 !important;
+/* ---------- Botones ---------- */
+.botones-acciones {
+  width: auto !important;
+  min-width: 120px;
+  height: 40px !important;
+  padding: 0 20px !important;
+  margin: 10px !important;
+  border-radius: 6px !important;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: none !important;
+  transition: background-color 0.15s, color 0.15s;
+}
+/* .rojo = primary */
+.rojo {
+  background-color: var(--accent) !important;
+  color: #fff !important;
+}
+.rojo:hover:not(:disabled) { background-color: var(--accent-dark) !important; }
+/* .verde = secondary (el verde dejó de ser color de marca) */
+.verde {
+  background-color: transparent !important;
+  color: var(--accent) !important;
+  border: 1px solid var(--accent) !important;
+}
+.verde:hover:not(:disabled) { background-color: rgba(163, 9, 9, 0.06) !important; }
+.rojo:disabled, .verde:disabled { opacity: 0.5; cursor: not-allowed; }
 
- }
+.demo-button-container {
+  width: 100% !important;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.buscador-ticket { width: 300px; margin: 10px; }
 
- .mat-mdc-table-sticky-border-elem-right {
-   border-left: 1px solid #e0e0e0;
- }
+/* Barra de filtros: buscador y filtros arriba; botones (Aplicar, PDF, Excel) juntos en su propia fila */
+.demo-button-container { margin-bottom: 16px; }
+.demo-button-container::before { content: ''; order: 1; flex-basis: 100%; height: 0; } /* salto de fila */
+.demo-button-container > div:has(> button.rojo) { order: 2; }
+.demo-button-container > div:has(> button.verde) { order: 3; }
+.buscador-item { padding-top: 10px !important; }
 
- .mat-mdc-table-sticky-border-elem-left {
-   border-right: 1px solid #e0e0e0;
- }
+/* ---------- Inputs ---------- */
+.form-control, .form-select {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  background-color: var(--white);
+}
+.form-control:focus, .form-select:focus, .borde-rojo:focus, .box-shadow-rojo:focus {
+  border-color: var(--accent) !important;
+  box-shadow: none !important;
+  outline: 0;
+}
+.form-floating > label { color: var(--muted); }
+option:hover { background-color: var(--accent) !important; }
 
- .items-center{
-   display: flex;
-   justify-content: center;
-   align-items: center;
- }
- .mat-elevation-z8 {
-   overflow-x: auto !important;
-  }
-  tr.mat-mdc-footer-row {
-   font-weight: bold;
+/* ---------- Tablas Material ---------- */
+table { width: 100%; }
+.mat-mdc-table { background: transparent !important; }
 
+.mat-mdc-header-row { background: var(--paper); }
+.mat-mdc-header-cell, th.mat-sort-header {
+  background: var(--paper) !important;
+  color: var(--muted) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.mat-sort-header-arrow { color: var(--accent) !important; }
 
- }
+.mat-mdc-cell { font-size: 14px; color: var(--ink); }
+.mat-mdc-row { border-bottom: 1px solid var(--line); }
+.mat-mdc-row:hover { background-color: rgba(163, 9, 9, 0.03); }
+.mat-mdc-cell, .mat-mdc-header-cell, .mat-mdc-footer-cell { border-bottom-color: var(--line); }
 
- .mat-mdc-table-sticky {
-   border-top: 1px solid #e0e0e0;
- }
- .demo-button-container{
-   width: 100% !important;
-   display: flex;
-   justify-content: start;
-   align-items: center;
-   flex-direction: row;
-   flex-wrap: wrap;
- }
- .botones-acciones{
-   width: 150px;
-   padding: 26px;
-   margin: 10px;
- }
- .buscador-ticket{
-   width: 300px;
-   margin: 10px;
- }
+tr.mat-mdc-footer-row { font-weight: bold; background: var(--paper); }
+.mat-mdc-footer-cell { background: var(--paper) !important; }
+td.mat-column-star { width: 20px; padding-right: 8px; }
+th.mat-column-position, td.mat-column-position { padding-left: 8px; }
+.mat-mdc-table-sticky-border-elem-right { border-left: 1px solid var(--line); }
+.mat-mdc-table-sticky-border-elem-left { border-right: 1px solid var(--line); }
+.mat-mdc-table-sticky { border-top: 1px solid var(--line); }
+#my-table th.mat-header-cell:first-child,
+#my-table td.mat-cell:first-child,
+#my-table td.mat-footer-cell:first-child { text-align: center !important; }
 
- .rojo{
-   --color:white !important;
-   --background-color: #a30909 !important;
-   color: white !important;
-   background-color: #a30909 !important;
- }
- .verde{
-   background-color: #0c7e0f !important;
-   color: white !important;
-   --background-color: #0c7e0f !important;
-   --color: white !important;
- }
+/* ---------- Tablas Bootstrap ---------- */
+.table > thead > tr > th {
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--line);
+}
+.table > tbody > tr > td { border-bottom: 1px solid var(--line); }
 
+/* ---------- Popups (SweetAlert2) ---------- */
+.swal2-popup { border-radius: 12px !important; font-family: var(--font-body); }
+.swal2-title { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.04em; }
+.swal2-styled { border-radius: 6px !important; }
+.swal2-styled.swal2-confirm:hover { background-image: none !important; background-color: var(--accent-dark) !important; }
 
- .mat-header-row {
-   --background-color: #005173 !important;
- }
- /*? CAMBIAR COLOR DE LAS CELDAS DE LA TABLA  */
- th.mat-sort-header {
-   color: #a30909 !important;
- }
-
- :host ::ng-deep .mat-sort-header-arrow {
-   color: #a30909 !important;
- }
-
- .buscador-item{
-   padding-top: 10px !important;
- }
-
- /* CREAMOS EL MEDIAQUERY PARA LOS DISPOSITIVOS MOVILES */
- @media (max-width: 646px) {
-   .mat-elevation-z8 {
-     overflow-x: scroll !important;
-    }
-    /* .demo-button-container{
-     overflow-x: scroll !important;
-
-    } */
-   .container-all{
-     padding-left: 10px;
-     padding-right: 10px;
-     padding-bottom: 250px !important;
-     overflow-y: scroll !important;
-   }
-   .mat-form-field {
-     font-size: 12px;
-   }
-   .mat-column-star {
-     width: 10px;
-     padding-right: 8px;
-   }
-   th.mat-column-position, td.mat-column-position {
-     padding-left: 8px;
-   }
-   .items-center{
-     display: flex;
-     justify-content: center;
-     align-items: center;
-   }
-   .demo-button-container{
-     width: 100% !important;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     flex-direction: column;
-   }
-   .botones-acciones{
-     width: 300px;
-     margin: 10px;
-   }
- }
-
-
+/* ---------- Móvil ---------- */
+@media (max-width: 646px) {
+  .container-all { padding: 12px 10px 80px; }
+  .mat-elevation-z8 { padding: 12px; overflow-x: scroll !important; }
+  .mat-form-field { font-size: 12px; }
+  .demo-button-container { flex-direction: column; justify-content: center; }
+  .buscador-ticket { width: 100%; max-width: 320px; }
+  .demo-button-container::before { display: none; }
+  .demo-button-container > div:has(> button) { width: 100%; max-width: 340px; }
+  .botones-acciones { width: calc(100% - 20px) !important; max-width: 320px; } /* -20px: margen de 10px a cada lado */
+  app-titulo-pagina h5 { font-size: 22px; }
+}

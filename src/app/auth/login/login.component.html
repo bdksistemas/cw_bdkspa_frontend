@@ -1,150 +1,76 @@
-<section
-  class="h-100 gradient-form"
-  style="background-color: #eee; overflow: hidden"
->
-  <div class="container py-5 h-100">
-    <div
-      class="row d-flex justify-content-center align-items-center h-100 animate__animated animate__backInUp container-card"
-    >
-      <div class="col-xl-10" style="background-color: transparent">
-        <div class="card rounded-3 text-black">
-          <div class="row g-0 box-shadows" style="margin: 0px">
-            <div class="col-lg-6">
-              <div class="card-body p-md-5 mx-md-4">
-                <div class="text-center mt-5 container-img">
-                  <img
-                    src="./assets/img/LOGO_BDKSPA_GRAL.png"
-                    style="width: 270px"
-                    alt="logo"
-                    class="img-logo"
-                  />
-                  <h4 class="mt-2 mb-5 pb-1" [style.font-size]="titulosize">
-                    {{ titulo }}
-                  </h4>
+<section class="h-100 gradient-form">
+  <div class="container py-5 h-100 " >
+    <div class="row d-flex justify-content-center align-items-center h-100 animate__animated animate__backInUp container-card " >
+      <div class="col-xl-10"  style="background-color: transparent;">
+        <div class="card login-card text-black">
+          <div class="row g-0 box-shadows">
+            <div class="col-lg-6" >
+              <div class="card-body p-md-5 mx-md-4" >
+
+                <div class="text-center mt-5 container-img ">
+                  <img src="./assets/img/LOGO_BDKSPA_GRAL.png"
+                    style="width: 270px;" alt="logo" class="img-logo">
+                  <h4 class="login-subtitulo mt-2 mb-5 pb-1" [style.font-size]="titulosize">{{titulo}}</h4>
                 </div>
 
-                <form [formGroup]="loginForm">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                   <div class="flex text-center">
                     <p>Ingresa tus datos de cliente.</p>
+
                   </div>
-                  <mat-form-field
-                    appearance="outline"
-                    [color]="
-                      loginForm.controls['idcw'].valid ? 'accent' : 'warn'
-                    "
-                  >
-                    <mat-label
-                      [ngClass]="{
-                        'label-valid': loginForm.controls['idcw'].valid
-                      }"
-                    >
+                  <mat-form-field appearance="outline">
+                    <mat-label>
                       Ingresa ID:
                     </mat-label>
-                    <input
-                      type="number"
-                      matInput
-                      placeholder="Ej. XXX25"
-                      formControlName="idcw"
-                      [ngClass]="{
-                        'label-valid': loginForm.controls['idcw'].valid
-                      }"
-                    />
+                    <input type="number" matInput placeholder="Ej. XXX25" formControlName="idcw" name="idcw" autocomplete="off">
                   </mat-form-field>
 
-                  <mat-form-field
-                    appearance="outline"
-                    [color]="
-                      loginForm.controls['cwuser'].valid ? 'accent' : 'warn'
-                    "
-                  >
-                    <mat-label
-                      [ngClass]="{
-                        'label-valid': loginForm.controls['cwuser'].valid
-                      }"
-                      >Ingresa Correo:</mat-label
-                    >
-                    <input
-                      type="email"
-                      matInput
-                      placeholder="Ej. user@bdksistemas.com"
-                      formControlName="cwuser"
-                      [ngClass]="{
-                        'label-valid': loginForm.controls['cwuser'].valid
-                      }"
-                    />
+
+
+
+                  <mat-form-field appearance="outline"  >
+                    <mat-label>Ingresa Correo:</mat-label>
+                    <input type="email" matInput placeholder="Ej. user@bdksistemas.com" formControlName="cwuser" name="username" autocomplete="username">
                   </mat-form-field>
 
-                  <mat-form-field
-                    appearance="outline"
-                    [color]="
-                      loginForm.controls['cwpassword'].valid ? 'accent' : 'warn'
-                    "
-                  >
-                    <mat-label
-                      [ngClass]="{
-                        'label-valid': loginForm.controls['cwpassword'].valid
-                      }"
-                      >Ingresa Password:</mat-label
-                    >
-                    <input
-                      [type]="hide ? 'password' : 'text'"
-                      matInput
-                      placeholder="Ej. passw0rd3x4amp!eñ"
-                      formControlName="cwpassword"
-                      [ngClass]="{
-                        'label-valid': loginForm.controls['cwpassword'].valid
-                      }"
-                    />
-                    <button
-                      mat-icon-button
-                      matSuffix
-                      (click)="hide = !hide"
-                      [attr.aria-label]="'Hide password'"
-                      [attr.aria-pressed]="hide"
-                    >
-                      <mat-icon>{{
-                        hide ? "visibility_off" : "visibility"
-                      }}</mat-icon>
+                  <mat-form-field appearance="outline"  >
+                    <mat-label>Ingresa Password:</mat-label>
+                    <input [type]="hide ? 'password' : 'text'" matInput placeholder="Ej. passw0rd3x4amp!eñ"  formControlName="cwpassword" name="password" autocomplete="current-password">
+                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
                   </mat-form-field>
+
+
+
+                  <label class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" formControlName="recordar">
+                    <span class="form-check-label">Recordar ID y correo</span>
+                  </label>
 
                   <div class="text-center pt-1 mb-5 pb-1">
-                    <button
-                      id="btnLogin"
-                      mat-flat-button
-                      color="primary"
-                      style="width: 250px"
-                      class="p-4"
-                      (click)="onSubmit()"
-                    >
-                      Ingresar
-                    </button>
+                    <button id="btnLogin" type="submit" mat-flat-button color="primary" class="btn-login">Ingresar</button>
                   </div>
+
+
                 </form>
+
               </div>
             </div>
             <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-              <div class="container-right"></div>
-              <!-- Contenedor para la imagen de fondo con el filtro -->
               <div class="text-white px-3 py-4 p-md-5 mx-md-4 texto-encima">
-                <h4 class="mb-4 text-bold">
-                  Simplifica la gestión de tu negocio de forma eficiente.
-                </h4>
+                <h4 class="mb-4 text-bold">Simplifica la gestión de tu negocio de forma eficiente.</h4>
                 <p class="small mb-0 text-justify">
-                  Mejora la administración de tu centro de belleza con nuestro
-                  software especialmente diseñado para dueños, gerentes y
-                  cajeros.
-                </p>
-                <br />
-                <p>
-                  Ideal para llevar el control de tus ventas, tratamientos,
-                  sesiones, citas, comisiones y mucho más.
-                </p>
+                 Mejora la administración de tu salón de belleza, estética o spa con nuestro software especialmente diseñado para dueños, gerentes y cajeros
+                  <br>
+                Ideal para llevar el control de tus ventas, seguimiento a tratamientos y citas, inventarios, administración y mucho más.
               </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
   </div>
+
 </section>

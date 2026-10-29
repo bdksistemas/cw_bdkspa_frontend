@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+@include mat.core();
+
+// Un solo acento (rojo BDK). Ver DESIGN-SYSTEM-PORTABLE.md
+$bdk-red: map.merge(mat.$red-palette, (100: #f3d9d9, 500: #a30909, 700: #7d0707));
+
+$theme: mat.define-light-theme((
+  color: (
+    primary: mat.define-palette($bdk-red, 500, 100, 700),
+    accent: mat.define-palette($bdk-red, 500, 100, 700),
+    warn: mat.define-palette($bdk-red, 500, 100, 700),
+  ),
+  typography: mat.define-typography-config($font-family: 'Inter, "Helvetica Neue", sans-serif'),
+  density: 0,
+));
+
+@include mat.all-component-themes($theme);

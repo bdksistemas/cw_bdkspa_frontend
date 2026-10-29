@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { environment } from '../../enviroments/enviroment';
 import { Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -63,10 +63,17 @@ export class PagesComponent {
 
   tituloProyecto:string = 'BDK';
   nombreUsuario= 'BDK';
+  inicialUsuario = 'B';
+  esEscritorio = true; // sidebar fijo desde 992px, drawer en móvil
 
-  constructor(public router: Router, private AuthService: AuthService, private cdr: ChangeDetectorRef) {
+  constructor(public router: Router, private AuthService: AuthService, private cdr: ChangeDetectorRef, breakpoints: BreakpointObserver) {
     this.tituloProyecto = environment.TITULO_PROYECTO;
     this.nombreUsuario = environment.NOMBRE_USUARIO_SISTEMA;
+    breakpoints.observe('(min-width: 992px)').subscribe(r => this.esEscritorio = r.matches);
+  }
+
+  cerrarEnMovil() {
+    if (!this.esEscritorio) this.sidenav.close();
   }
 
 
@@ -103,9 +110,7 @@ export class PagesComponent {
     {
       titulo: 'INICIO',
       icono: 'fas fa-home',
-      submenu: [
-        { titulo: 'Dashboard', url: '/Inicio', icon: 'far fa-circle' },
-      ]
+      url: '/Inicio', // enlace directo, sin submenú
     },
     {
       titulo: 'AGENDA',
@@ -171,6 +176,10 @@ export class PagesComponent {
 
   ngOnInit() {
     this.nombreUsuario = localStorage.getItem('nom_cw')!;
+    if (this.nombreUsuario.length > 15) {
+      this.nombreUsuario = this.nombreUsuario.substring(0, 15);
+    }
+    this.inicialUsuario = this.nombreUsuario.charAt(0).toUpperCase();
 
     // Abre los submenús automáticamente al cargar la página
     this.menuItems.forEach(item => {
