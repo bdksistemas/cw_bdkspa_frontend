@@ -129,18 +129,7 @@ export class ApiServiceService  {
     }
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
-
-  getReporteVentasProdCancelados($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = 1, $usuario: string = localStorage.getItem('id_usuario')!){
-    let url = 'rventas/getProductosCancelados'
-    let data = {
-      'fecha_inicial': $fechaInicial,
-      'fecha_final': $fechaFinal,
-      'id_usuario': $usuario,
-      'sucursal': $sucursal,
-
-    }
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-  }
+
 
   getReporteAlmacenExistencias($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = 1, $categoria:number =0, $usuario: string = localStorage.getItem('id_usuario')!){
     let url = 'ralmacen/getExistencias'
@@ -245,29 +234,8 @@ export class ApiServiceService  {
 
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
-
-  getClases(sucursal:any){
-    let url = 'rsocios/getClases'
-    let data = {
-      'sucursal': sucursal,
-    }
-
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-  }
-
-  getHorarios(sucursal:any, clase:any){
-    let url = 'rsocios/getHorarios'
-    let data = {
-      'sucursal': sucursal,
-      'clase': clase
-    }
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-  }
-  getHorariosSocios(data:any){
-    let url = 'rsocios/getHorarios'
-
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-  }
+
+
 
 
   getTipoSuscripcion(sucursal:any){
@@ -292,42 +260,9 @@ export class ApiServiceService  {
 
 
 
-  //Suscripciones vencidas:
-  getSuscripcionesVencidas($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = 1, $usuario: string = localStorage.getItem('id_usuario')!){
-    let url = 'rtickets/suscripciones-vencidas'
-    let data = {
-      'fecha_inicial': $fechaInicial,
-      'fecha_final': $fechaFinal,
-      'id_usuario': $usuario,
-      'sucursal': $sucursal,
-
-    }
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-  }
-
-  getReporteSociosAsistencia($clase=0, $sucursal: number = 1, $fechaInicial:any =null, $fechaFinal:any =null,){
-    let url = 'rsocios/getAsistenciaSocios'
-    let data = {
-      'clase': $clase,
-      'sucursal': $sucursal,
-      'fecha_inicial': $fechaInicial,
-      'fecha_final': $fechaFinal,
-
-    }
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-  }
-
-  getReporteInscripciones($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = 1, $usuario: string = localStorage.getItem('id_usuario')!){
-    let url = 'rsocios/getReporteInscripciones'
-    let data = {
-      'fecha_inicial': $fechaInicial,
-      'fecha_final': $fechaFinal,
-      'id_usuario': $usuario,
-      'sucursal': $sucursal,
-
-    }
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-  }
+  //Suscripciones vencidas:
+
+
 
   getListaSociosActivos($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = 1, categoria:number =0){
     let url = 'rsocios/getListaSociosActivos'

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { HeroesComponent } from './heroes/heroes.component';
 import { ToasterComponent } from './toaster/toaster.component';
 import { authGuard } from '../guards/auth.guard';
 import { TicketsComponent } from './reports/tickets/tickets.component';
@@ -11,7 +10,6 @@ import { VentasDetalladoComponent } from './reports/ventas-detallado/ventas-deta
 import { TablaDatosComponent } from './tabla/tabla-datos.component';
 import { VentasProductoComponent } from './reports/ventas-producto/ventas-producto.component';
 import { VentasCategoriaComponent } from './reports/ventas-categoria/ventas-categoria.component';
-import { VentasProductosCanceladosComponent } from './reports/ventas-productos-cancelados/ventas-productos-cancelados.component';
 import { AlmacenExistenciasComponent } from './reports/almacen-existencias/almacen-existencias.component';
 import { AlmacenEntradasComponent } from './reports/almacen-entradas/almacen-entradas.component';
 import { AlmacenSalidasComponent } from './reports/almacen-salidas/almacen-salidas.component';
@@ -20,12 +18,8 @@ import { GastosGeneralComponent } from './reports/gastos-general/gastos-general.
 import { BannerPublicitarioComponent } from './banner-publicitario/banner-publicitario.component';
 import { autorizationGuard } from '../guards/autorization.guard';
 import { CobroMembresiasComponent } from './reports/tratamientos-activos/tratamientos-activos.component';
-import { SuscripcionesVencidasComponent } from './reports/suscripciones-vencidas/suscripciones-vencidas.component';
 import { VentasCreditoComponent } from './reports/ventas-credito/ventas-credito.component';
 import { SociosActivosComponent } from './reports/socios-activos/socios-activos.component';
-import { SociosClaseComponent } from './reports/socios-clase/socios-clase.component';
-import { SociosAsistenciaComponent } from './reports/socios-asistencia/socios-asistencia.component';
-import { SociosInscripcionesComponent } from './reports/socios-inscripciones/socios-inscripciones.component';
 import { SalidasEfectivoComponent } from './reports/salidas-efectivo/salidas-efectivo.component';
 import { AgendaGeneralComponent } from './reports/agenda-general/agenda-general.component';
 import { AgendaSalaComponent } from './reports/agenda-sala/agenda-sala.component';
@@ -59,18 +53,6 @@ const routes: Routes = [
       {
         path: 'reportes/ingresos',
         component: IngresosComponent,
-        data: { animation: 'fadeIn' },
-        canActivate: [autorizationGuard]
-      },
-      {
-        path: 'reportes/suscripciones-vencidas',
-        component: SuscripcionesVencidasComponent,
-        data: { animation: 'fadeIn' },
-        canActivate: [autorizationGuard]
-      },
-      {
-        path: 'reportes/ventas-detallado',
-        component: VentasDetalladoComponent,
         data: { animation: 'fadeIn' },
         canActivate: [autorizationGuard]
       },
@@ -109,22 +91,7 @@ const routes: Routes = [
         data: { animation: 'fadeIn' },
         canActivate: [autorizationGuard]
       },
-      {
-        path:'socios/socios-clase',
-        component: SociosClaseComponent,
-        canActivate: [autorizationGuard]
-      },
 
-      {
-        path:'socios/socios-asistencia',
-        component: SociosAsistenciaComponent,
-        canActivate: [autorizationGuard]
-      },
-      {
-        path:'socios/socios-inscripciones',
-        component: SociosInscripcionesComponent,
-        canActivate: [autorizationGuard]
-      },
 
 
       //ALMACEN
@@ -197,11 +164,6 @@ const routes: Routes = [
 
       // Pruebas de componentes
 
-      {
-        path: 'heroes',
-        component: HeroesComponent,
-        data: { titulo: 'DataTable' },
-      },
       {
         path: 'toaster',
         component: ToasterComponent,
