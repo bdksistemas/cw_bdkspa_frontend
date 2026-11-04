@@ -9,7 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../auth/auth.service';
+import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { Licencia } from '../../../interfaces/Licencia';
 
 @Component({
@@ -176,7 +176,7 @@ export class GastosGeneralComponent {
   }
 
   //Variables para fecha inicial y fecha final
-  sucursal: number = 1;
+  sucursal: number = sucursalInicial();
   fechaInicial: string = '';
   fechaFinal: string = '';
   validarFechaInicial(event: any) {

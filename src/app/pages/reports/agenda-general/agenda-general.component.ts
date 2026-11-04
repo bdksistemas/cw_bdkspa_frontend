@@ -8,7 +8,7 @@ import autoTable from 'jspdf-autotable';
 import * as xlsx from 'xlsx';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../auth/auth.service';
+import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { Licencia } from '../../../interfaces/Licencia';
 @Component({
   selector: 'app-agenda-general',
@@ -224,7 +224,7 @@ export class AgendaGeneralComponent {
   }
 
   //Variables para fecha inicial y fecha final
-  sucursal: number = 1;
+  sucursal: number = sucursalInicial();
   fechaInicial: string = '';
   fechaFinal: string = '';
   validarFechaInicial(event: any) {

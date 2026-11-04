@@ -8,7 +8,7 @@ import autoTable from 'jspdf-autotable';
 import * as xlsx from 'xlsx';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../auth/auth.service';
+import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { Licencia } from '../../../interfaces/Licencia';
 
 
@@ -251,7 +251,7 @@ getTipoTratamiento(){
   }
 
     //Obtener sucursales
-    sucursal:any = 1;
+    sucursal:any = sucursalInicial();
     sucursales: Licencia[] = [];
     obtenerSucursales() {
       //Verificamos si tenemos las sucursales dentro del authService

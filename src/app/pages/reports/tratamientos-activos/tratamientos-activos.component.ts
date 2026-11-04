@@ -10,7 +10,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { Licencia } from '../../../interfaces/Licencia';
-import { AuthService } from '../../../auth/auth.service';
+import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 
 
 @Component({
@@ -249,7 +249,7 @@ getTipoTratamiento(){
   }
 
     //Obtener sucursales
-    sucursal:any = 1;
+    sucursal:any = sucursalInicial();
     sucursales: Licencia[] = [];
     obtenerSucursales() {
       //Verificamos si tenemos las sucursales dentro del authService

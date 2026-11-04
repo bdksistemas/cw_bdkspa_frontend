@@ -11,7 +11,7 @@ import { ApiServiceService } from '../../services/api-service.service';
 import { Toast } from 'primeng/toast';
 import { ToastrService } from 'ngx-toastr';
 import { Licencia } from '../../interfaces/Licencia';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService, sucursalInicial } from '../../auth/auth.service';
 
 export interface TicktData {
   ticket: number;
@@ -185,7 +185,7 @@ export class TablaDatosComponent {
 
 
   //Variables para fecha inicial y fecha final
-  sucursal: number = 1;
+  sucursal: number = sucursalInicial();
   fechaInicial: string = '';
   fechaFinal: string = '';
   validarFechaInicial(event: any) {

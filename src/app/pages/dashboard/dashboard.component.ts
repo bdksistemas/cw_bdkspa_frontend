@@ -3,7 +3,7 @@ import { Chart } from 'chart.js';
 import { ApiServiceService } from '../../services/api-service.service';
 import { DdatosIniciales } from '../../interfaces/DdatosIniciales';
 import { Licencia } from '../../interfaces/Licencia';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService, sucursalInicial } from '../../auth/auth.service';
 const salesData = [10, 20, 30, 25, 40, 35, 50, 45, 60, 55, 70, 65];
 
 @Component({
@@ -48,7 +48,7 @@ export class DashboardComponent {
   ngOnInit(): void {
     setTimeout(() => {
       this.obtenerSucursales();
-      this.getInitialData(1);
+      this.getInitialData(sucursalInicial());
     }, 500);
   }
 
