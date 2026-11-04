@@ -10,7 +10,6 @@ import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../auth/auth.service';
 import { Licencia } from '../../../interfaces/Licencia';
-import { TipoSuscripciones } from '../../../interfaces/TipoSuscripciones';
 
 
 /**
@@ -86,13 +85,6 @@ export class IngresosComponent {
 
   }
 
-
-  tiposSuscripcion: TipoSuscripciones[] = []
-  getTipoSuscripcion(){
-    this.apiService.getTipoSuscripcion(this.sucursal).subscribe((data: any) => {
-      this.tiposSuscripcion = data.data;
-    });
-  }
 
   tipoTrataniento:any[] = []
 getTipoTratamiento(){

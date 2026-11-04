@@ -98,7 +98,7 @@ export class ApiServiceService  {
     }
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
-
+
 
   getReporteAlmacenExistencias($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = 1, $categoria:number =0, $usuario: string = localStorage.getItem('id_usuario')!){
     let url = 'ralmacen/getExistencias'
@@ -203,19 +203,9 @@ export class ApiServiceService  {
 
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
+
 
-
 
-
-  getTipoSuscripcion(sucursal:any){
-
-    let url = 'general/getTipoSuscripcion'
-    let data = {
-      'sucursal': sucursal,
-    }
-
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-  }
 
   getCajeros(sucursal:any){
 
@@ -229,9 +219,9 @@ export class ApiServiceService  {
 
 
 
-  //Suscripciones vencidas:
-
-
+  //Suscripciones vencidas:
+
+
 
   getListaSociosActivos($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = 1, categoria:number =0){
     let url = 'rsocios/getListaSociosActivos'
