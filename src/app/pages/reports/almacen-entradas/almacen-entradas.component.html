@@ -48,13 +48,18 @@
 
       <div class="form-floating buscador-ticket">
         <select (change)="cambioProvedor($event)"   class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
-          <option value="null">SELECCIONA UN PROVEDOR</option>
+          <option value="0">SELECCIONA UN PROVEDOR</option>
           @for (item of provedores; track $index) {
             <option value="{{item.proveedor}}">{{item.nomproveedor}} </option>
           }
 
         </select>
         <label for="floatingSelect">PROVEDOR</label>
+      </div>
+      <div class="">
+        <button (click)="aplicarFiltros()" mat-raised-button class="botones-acciones rojo">
+          APLICAR FILTROS <i class="fas fa-filter ml-3"></i>
+        </button>
       </div>
     <table id="my-table" mat-table [dataSource]="dataSource" matSort >
 

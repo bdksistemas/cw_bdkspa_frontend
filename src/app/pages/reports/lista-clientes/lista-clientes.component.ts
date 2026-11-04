@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -55,13 +56,7 @@ export class ListaClientesComponent {
   }
   categoriaSeleccionada:number = 0;
   cambioCategoria(event: any) {
-    let categorias = event.target.value;
-    this.categoriaSeleccionada = categorias;
-    let sucursal = this.sucursal;
-
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, categorias);
-
+    this.categoriaSeleccionada = Number(event.target.value);
   }
 
 
@@ -138,55 +133,48 @@ export class ListaClientesComponent {
   validarFechaInicial(event: any) {
     this.fechaInicial = event.value;
 
-    //Si las fechas son iguales, mostramos un mensaje de adventencia
-      if (this.fechaFinal == this.fechaInicial) {
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-    }
-    //Si la fecha final es mayor a la fecha inicial, APLICAMOS EL FILTRADO.
-    if (this.fechaFinal > this.fechaInicial) {
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-    }
-
     //Si la fecha inicial es mayor a la fecha final, mostramos un mensaje de error
-    if (this.fechaInicial > this.fechaFinal) {
+    if (this.fechaFinal && this.fechaInicial > this.fechaFinal) {
       this.toast.warning('La fecha FINAL no puede ser menor.', 'Advertencia', {
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
-      return;
     }
   }
   validarFechaFinal(event: any) {
     this.fechaFinal = event.value;
 
-    //Si la fecha inicial esta vacia, mostramos un mensaje de error
-    if (this.fechaInicial == null || this.fechaInicial == undefined) {
-      this.toast.error('La fecha inicial no puede estar vacía.', 'Error', {
-        positionClass: 'toast-top-center',
-        timeOut: 5000,
-      });
-      return;
-    }
-
     //Evaluamos la fecha final, si es menor a la fecha inicial, mostramos un mensaje de error
-    if (this.fechaFinal < this.fechaInicial) {
+    if (this.fechaInicial && this.fechaFinal && this.fechaFinal < this.fechaInicial) {
       this.fechaFinal = this.fechaInicial;
       this.toast.error('La fecha FINAL no puede ser menor.', 'Error', {
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
+    }
+  }
+
+  //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros".
+  //Fechas opcionales: sin fechas = todos los clientes activos; con fechas = altas en ese rango.
+  aplicarFiltros() {
+    const hayUna = !!this.fechaInicial || !!this.fechaFinal;
+    const hayAmbas = !!this.fechaInicial && !!this.fechaFinal;
+    if ((hayUna && !hayAmbas) || (hayAmbas && this.fechaFinal < this.fechaInicial)) {
+      this.toast.error('Revisa el rango de fechas.', 'Error', {
+        positionClass: 'toast-bottom-center',
+        timeOut: 5000,
+      });
       return;
     }
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.categoriaSeleccionada);
   }
-  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string, categoria:number =0) {
-    this.apiService
-      .getListaClientes(fecjaInicial, fechaFinal, this.sucursal, categoria)
+
+  private consulta?: Subscription;
+  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string, categoria: number = 0, avisar: boolean = true) {
+    this.consulta?.unsubscribe();
+    this.consulta = this.apiService
+      .getListaClientes(fecjaInicial || null, fechaFinal || null, this.sucursal, categoria)
       .subscribe((data: any) => {
-
-        this.obtenerCategorias();
-
 
         this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
         this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
@@ -197,14 +185,13 @@ export class ListaClientesComponent {
         this.dataSource.sort = this.sort;
 
         //Mostramos un toast en medio de la pantalla para indicar que se ha filtrado la tabla
-        this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
-          /// Mostramos en la parte inferior y en el centro
-          positionClass: 'toast-bottom-center',
-          // Tiempo de duración del toast
-          timeOut: 9000,
-          // Mostramos el botón de cerrar
-          closeButton: true,
-        });
+        if (avisar) {
+          this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
+            positionClass: 'toast-bottom-center',
+            timeOut: 9000,
+            closeButton: true,
+          });
+        }
       });
   }
     //Obtener sucursales
@@ -221,7 +208,8 @@ export class ListaClientesComponent {
     }
     cambioSucusal(event: any) {
       this.sucursal = event.target.value;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
+      this.categoriaSeleccionada = 0; //las categorías son por sucursal; se recargan abajo
+      this.obtenerCategorias();
     }
   ngOnInit() {
 
@@ -229,20 +217,7 @@ export class ListaClientesComponent {
     this.obtenerCategorias();
 
 
-    //Asignamos la fecha inicial y final a la fecha actual con el formato correcto
-    const currentDate = new Date();
-    this.fechaInicial = currentDate.toISOString().slice(0, 10);
-    this.fechaFinal = currentDate.toISOString().slice(0, 10);
-
-    //! Datos de la API
-    this.apiService.getListaClientes().subscribe((data: any) => {
-      this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
-      this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
-      this.MatPaginatorIntl.previousPageLabel = 'Anterior';
-      this.dataSource = new MatTableDataSource(data.data);
-
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+    //Por defecto: todos los clientes activos, sin fechas
+    this.traerDatosFiltradosAPI('', '', this.categoriaSeleccionada, false);
   }
 }

@@ -55,6 +55,11 @@
         </select>
         <label for="floatingSelect">Selecciona Tratamiento</label>
       </div>
+      <div class="">
+        <button (click)="aplicarFiltros()" mat-raised-button class="botones-acciones rojo">
+          APLICAR FILTROS <i class="fas fa-filter ml-3"></i>
+        </button>
+      </div>
     </div>
     <table id="my-table" mat-table [dataSource]="dataSource" matSort >
 

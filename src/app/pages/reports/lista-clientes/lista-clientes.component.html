@@ -52,12 +52,20 @@
 
       <div class="form-floating buscador-ticket">
         <select (change)="cambioCategoria($event)" class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
+          <option value="0">TODAS LAS CATEGORÍAS</option>
           @for (item of categorias; track $index) {
             <option value="{{item.categoria}}">{{item.nomcategoria}} </option>
           }
         </select>
         <label for="floatingSelect">Selecciona Categoría</label>
       </div>
+
+      <div class="">
+        <button (click)="aplicarFiltros()" mat-raised-button class="botones-acciones rojo">
+          APLICAR FILTROS <i class="fas fa-filter ml-3"></i>
+        </button>
+      </div>
+
       <!-- <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
         <label class="form-check-label" for="flexCheckDefault">

@@ -11,6 +11,7 @@ import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { Licencia } from '../../../interfaces/Licencia';
+import { Subscription } from 'rxjs';
 
 export interface TicktData {
   ticket: number;
@@ -72,21 +73,14 @@ export class VentasProductoComponent {
     this.obtenerSucursales();
 
     this.obtenerCategorias();
-    //Asignamos la fecha inicial y final a la fecha actual con el formato correcto
-    const currentDate = new Date();
-    this.fechaInicial = currentDate.toISOString().slice(0, 10);
-    this.fechaFinal = currentDate.toISOString().slice(0, 10);
+    //Por defecto: del 1° del mes actual al día de hoy (fecha local, no UTC)
+    const hoy = new Date();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    this.fechaInicial = `${hoy.getFullYear()}-${mm}-01`;
+    this.fechaFinal = `${hoy.getFullYear()}-${mm}-${dd}`;
 
-    //! Datos de la API
-    this.apiService.getReporteVentasProducto().subscribe((data: any) => {
-      this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
-      this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
-      this.MatPaginatorIntl.previousPageLabel = 'Anterior';
-      this.dataSource = new MatTableDataSource(data.data);
-
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.categoria, false);
   }
 
   categorias: any[] = [];
@@ -97,15 +91,9 @@ export class VentasProductoComponent {
     });
 
   }
+  categoria: any = 0;
   cambioCategoria(event: any) {
-    let categorias = event.target.value;
-    let sucursal = this.sucursal;
-
-    console.log('Sucursal: ', sucursal);
-    console.log('Categoria: ', categorias);
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, categorias);
-
+    this.categoria = event.target.value;
   }
 
   getTotalCost(columna: any) {
@@ -178,35 +166,12 @@ export class VentasProductoComponent {
   validarFechaInicial(event: any) {
     this.fechaInicial = event.value;
 
-    //Si las fechas son iguales, mostramos un mensaje de adventencia
-      if (this.fechaFinal == this.fechaInicial) {
-      // this.toast.warning('Selecciona fecha final para filtrar tabla.', 'Advertencia', {
-      //   positionClass: 'toast-bottom-center',
-      //   timeOut: 5000,
-      // });
-      // return;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-
-    }
-
-    //Si la fecha final es mayor a la fecha inicial, APLICAMOS EL FILTRADO.
-    if (this.fechaFinal > this.fechaInicial) {
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-
-      // this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
-      //   positionClass: 'toast-bottom-center',
-      //   timeOut: 9000,
-      //   closeButton: true,
-      // });
-    }
-
     //Si la fecha inicial es mayor a la fecha final, mostramos un mensaje de error
     if (this.fechaInicial > this.fechaFinal) {
       this.toast.warning('La fecha FINAL no puede ser menor.', 'Advertencia', {
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
-      return;
     }
   }
   validarFechaFinal(event: any) {
@@ -228,14 +193,25 @@ export class VentasProductoComponent {
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
-      return;
     }
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
   }
 
-  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string, categoria: any = 0) {
-    this.apiService
+  //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
+  aplicarFiltros() {
+    if (!this.fechaInicial || !this.fechaFinal || this.fechaFinal < this.fechaInicial) {
+      this.toast.error('Revisa el rango de fechas.', 'Error', {
+        positionClass: 'toast-bottom-center',
+        timeOut: 5000,
+      });
+      return;
+    }
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.categoria);
+  }
+
+  private consulta?: Subscription;
+  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string, categoria: any = 0, avisar: boolean = true) {
+    this.consulta?.unsubscribe();
+    this.consulta = this.apiService
       .getReporteVentasProducto(fecjaInicial, fechaFinal, this.sucursal, categoria)
       .subscribe((data: any) => {
 
@@ -251,14 +227,16 @@ export class VentasProductoComponent {
         this.dataSource.sort = this.sort;
 
         //Mostramos un toast en medio de la pantalla para indicar que se ha filtrado la tabla
-        this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
-          /// Mostramos en la parte inferior y en el centro
-          positionClass: 'toast-bottom-center',
-          // Tiempo de duración del toast
-          timeOut: 9000,
-          // Mostramos el botón de cerrar
-          closeButton: true,
-        });
+        if (avisar) {
+          this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
+            /// Mostramos en la parte inferior y en el centro
+            positionClass: 'toast-bottom-center',
+            // Tiempo de duración del toast
+            timeOut: 9000,
+            // Mostramos el botón de cerrar
+            closeButton: true,
+          });
+        }
       });
   }
 
@@ -276,7 +254,7 @@ export class VentasProductoComponent {
     }
     cambioSucusal(event: any) {
       this.sucursal = event.target.value;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
+      this.categoria = 0; //las categorías son por sucursal; se recargan abajo
       this.obtenerCategorias();
     }
 

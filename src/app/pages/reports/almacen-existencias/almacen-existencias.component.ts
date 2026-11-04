@@ -9,6 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { Toast, ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import { Licencia } from '../../../interfaces/Licencia';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 
@@ -72,23 +73,8 @@ export class AlmacenExistenciasComponent {
 
   ngOnInit() {
     this.obtenerSucursales();
-    //Asignamos la fecha inicial y final a la fecha actual con el formato correcto
-    const currentDate = new Date();
-    this.fechaInicial = currentDate.toISOString().slice(0, 10);
-    this.fechaFinal = currentDate.toISOString().slice(0, 10);
-
-    //! Datos de la API
-    this.apiService.getReporteAlmacenExistencias().subscribe((data: any) => {
-      //Mandamos llamar nuevamente las categorias, si es que esa sucursal tiene otras.
-      this.obtenerCategorias();
-      this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
-      this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
-      this.MatPaginatorIntl.previousPageLabel = 'Anterior';
-      this.dataSource = new MatTableDataSource(data.data);
-
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+    //Existencias es una foto del inventario: sin fechas, solo categoría y sucursal
+    this.traerDatosFiltradosAPI(this.categoria, false);
   }
 
   categorias: any[] = [];
@@ -99,15 +85,9 @@ export class AlmacenExistenciasComponent {
     });
 
   }
+  categoria: any = 0;
   cambioCategoria(event: any) {
-    let categorias = event.target.value;
-    let sucursal = this.sucursal;
-
-    console.log('Sucursal: ', sucursal);
-    console.log('Categoria: ', categorias);
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, categorias);
-
+    this.categoria = event.target.value;
   }
 
   getTotalCost(columna: any) {
@@ -180,72 +160,18 @@ export class AlmacenExistenciasComponent {
   isNumeric(value: any): boolean {
     return !isNaN(parseFloat(value)) && isFinite(value);
   }
-  //Variables para fecha inicial y fecha final
   sucursal: number = sucursalInicial();
-  fechaInicial: string = '';
-  fechaFinal: string = '';
-  validarFechaInicial(event: any) {
-    this.fechaInicial = event.value;
 
-    //Si las fechas son iguales, mostramos un mensaje de adventencia
-      if (this.fechaFinal == this.fechaInicial) {
-      // this.toast.warning('Selecciona fecha final para filtrar tabla.', 'Advertencia', {
-      //   positionClass: 'toast-bottom-center',
-      //   timeOut: 5000,
-      // });
-      // return;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-
-    }
-
-    //Si la fecha final es mayor a la fecha inicial, APLICAMOS EL FILTRADO.
-    if (this.fechaFinal > this.fechaInicial) {
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-
-      // this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
-      //   positionClass: 'toast-bottom-center',
-      //   timeOut: 9000,
-      //   closeButton: true,
-      // });
-    }
-
-    //Si la fecha inicial es mayor a la fecha final, mostramos un mensaje de error
-    if (this.fechaInicial > this.fechaFinal) {
-      this.toast.warning('La fecha FINAL no puede ser menor.', 'Advertencia', {
-        positionClass: 'toast-bottom-center',
-        timeOut: 5000,
-      });
-      return;
-    }
-  }
-  validarFechaFinal(event: any) {
-    this.fechaFinal = event.value;
-
-    //Si la fecha inicial esta vacia, mostramos un mensaje de error
-    if (this.fechaInicial == null || this.fechaInicial == undefined) {
-      this.toast.error('La fecha inicial no puede estar vacía.', 'Error', {
-        positionClass: 'toast-top-center',
-        timeOut: 5000,
-      });
-      return;
-    }
-
-    //Evaluamos la fecha final, si es menor a la fecha inicial, mostramos un mensaje de error
-    if (this.fechaFinal < this.fechaInicial) {
-      this.fechaFinal = this.fechaInicial;
-      this.toast.error('La fecha FINAL no puede ser menor.', 'Error', {
-        positionClass: 'toast-bottom-center',
-        timeOut: 5000,
-      });
-      return;
-    }
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
+  //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
+  aplicarFiltros() {
+    this.traerDatosFiltradosAPI(this.categoria);
   }
 
-  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string, categoria=0) {
-    this.apiService
-      .getReporteAlmacenExistencias(fecjaInicial, fechaFinal, this.sucursal, categoria)
+  private consulta?: Subscription;
+  traerDatosFiltradosAPI(categoria: any = 0, avisar: boolean = true) {
+    this.consulta?.unsubscribe();
+    this.consulta = this.apiService
+      .getReporteAlmacenExistencias(null, null, this.sucursal, categoria)
       .subscribe((data: any) => {
 
         //Mandamos llamar nuevamente las categorias, si es que esa sucursal tiene otras.
@@ -260,14 +186,16 @@ export class AlmacenExistenciasComponent {
         this.dataSource.sort = this.sort;
 
         //Mostramos un toast en medio de la pantalla para indicar que se ha filtrado la tabla
-        this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
-          /// Mostramos en la parte inferior y en el centro
-          positionClass: 'toast-bottom-center',
-          // Tiempo de duración del toast
-          timeOut: 9000,
-          // Mostramos el botón de cerrar
-          closeButton: true,
-        });
+        if (avisar) {
+          this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
+            /// Mostramos en la parte inferior y en el centro
+            positionClass: 'toast-bottom-center',
+            // Tiempo de duración del toast
+            timeOut: 9000,
+            // Mostramos el botón de cerrar
+            closeButton: true,
+          });
+        }
       });
   }
 
@@ -285,7 +213,10 @@ export class AlmacenExistenciasComponent {
   }
   cambioSucusal(event: any) {
     this.sucursal = event.target.value;
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
+    //Las categorías dependen de la sucursal: reiniciamos el filtro y recargamos el catálogo
+    this.categoria = 0;
+    this.categorias = [];
+    this.obtenerCategorias();
   }
 
   // Generar datos de prueba para cada columna

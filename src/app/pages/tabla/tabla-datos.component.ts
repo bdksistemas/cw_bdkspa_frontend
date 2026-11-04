@@ -9,6 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ApiServiceService } from '../../services/api-service.service';
 import { Toast } from 'primeng/toast';
+import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Licencia } from '../../interfaces/Licencia';
 import { AuthService, sucursalInicial } from '../../auth/auth.service';
@@ -78,22 +79,15 @@ export class TablaDatosComponent {
     this.obtenerCategorias();
 
 
-    //Asignamos la fecha inicial y final a la fecha actual con el formato correcto
-    const currentDate = new Date();
-    this.fechaInicial = currentDate.toISOString().slice(0, 10);
-    this.fechaFinal = currentDate.toISOString().slice(0, 10);
+    //Asignamos la fecha inicial y final al día actual (fecha local, no UTC)
+    const hoy = new Date();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    this.fechaInicial = `${hoy.getFullYear()}-${mm}-${dd}`;
+    this.fechaFinal = this.fechaInicial;
 
-     //! Datos de la API
-     this.apiService.getReporteTickets().subscribe((data: any) => {
-      this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
-      this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
-      this.MatPaginatorIntl.previousPageLabel = 'Anterior';
-      this.dataSource = new MatTableDataSource(data.data);
-
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-
-    });
+    //Al entrar solo cargamos lo del día actual
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.categoria, false);
   }
 
 
@@ -123,15 +117,9 @@ export class TablaDatosComponent {
     });
 
   }
+  categoria: any = 0;
   cambioCategoria(event: any) {
-    let categorias = event.target.value;
-    let sucursal = this.sucursal;
-
-    console.log('Sucursal: ', sucursal);
-    console.log('Categoria: ', categorias);
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, categorias);
-
+    this.categoria = event.target.value;
   }
 
   applyFilter(filterValue: any) {
@@ -191,36 +179,19 @@ export class TablaDatosComponent {
   validarFechaInicial(event: any) {
     this.fechaInicial = event.value;
 
-    //Si las fechas son iguales, mostramos un mensaje de adventencia
-      if (this.fechaFinal == this.fechaInicial) {
-      // this.toast.warning('Selecciona fecha final para filtrar tabla.', 'Advertencia', {
-      //   positionClass: 'toast-bottom-center',
-      //   timeOut: 5000,
-      // });
-      // return;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-
-    }
-
-    //Si la fecha final es mayor a la fecha inicial, APLICAMOS EL FILTRADO.
-    if (this.fechaFinal > this.fechaInicial) {
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-    }
-
     //Si la fecha inicial es mayor a la fecha final, mostramos un mensaje de error
     if (this.fechaInicial > this.fechaFinal) {
       this.toast.warning('La fecha FINAL no puede ser menor.', 'Advertencia', {
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
-      return;
     }
   }
   validarFechaFinal(event: any) {
     this.fechaFinal = event.value;
 
     //Si la fecha inicial esta vacia, mostramos un mensaje de error
-    if (this.fechaInicial == null || this.fechaInicial == undefined ) {
+    if (!this.fechaInicial) {
       this.toast.error('La fecha inicial no puede estar vacía.', 'Error', {
         positionClass: 'toast-top-center',
         timeOut: 5000,
@@ -235,14 +206,25 @@ export class TablaDatosComponent {
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
-      return;
     }
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
   }
 
-  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string, categoria: number = 0) {
-    this.apiService.getReporteTickets(fecjaInicial,fechaFinal, this.sucursal,categoria).subscribe((data: any) => {
+  //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
+  aplicarFiltros() {
+    if (!this.fechaInicial || !this.fechaFinal || this.fechaFinal < this.fechaInicial) {
+      this.toast.error('Revisa el rango de fechas.', 'Error', {
+        positionClass: 'toast-bottom-center',
+        timeOut: 5000,
+      });
+      return;
+    }
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.categoria);
+  }
+
+  private consulta?: Subscription;
+  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string, categoria: any = 0, avisar: boolean = true) {
+    this.consulta?.unsubscribe();
+    this.consulta = this.apiService.getReporteTickets(fecjaInicial,fechaFinal, this.sucursal,categoria).subscribe((data: any) => {
 
 
         //Volvemos a obtener las categorias:
@@ -257,6 +239,7 @@ export class TablaDatosComponent {
       this.dataSource.sort = this.sort;
 
       //Mostramos un toast en medio de la pantalla para indicar que se ha filtrado la tabla
+      if (avisar) {
         this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
           /// Mostramos en la parte inferior y en el centro
           positionClass: 'toast-bottom-center',
@@ -264,7 +247,8 @@ export class TablaDatosComponent {
           timeOut: 9000,
           // Mostramos el botón de cerrar
           closeButton: true,
-      });
+        });
+      }
 
     });
   }
@@ -283,14 +267,13 @@ export class TablaDatosComponent {
     }
     cambioSucusal(event: any) {
       this.sucursal = event.target.value;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.estatusTicket);
+      this.categoria = 0; //las categorías son por sucursal; se recargan abajo
+      this.obtenerCategorias();
     }
 
     estatusTicket: number = 0;
     cambioEstatus(event: any){
       this.estatusTicket = event.target.value;
-      console.log(this.estatusTicket)
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.estatusTicket);
     }
 
 

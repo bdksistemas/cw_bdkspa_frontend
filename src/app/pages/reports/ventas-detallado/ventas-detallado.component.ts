@@ -11,6 +11,7 @@ import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { Licencia } from '../../../interfaces/Licencia';
+import { Subscription } from 'rxjs';
 
 export interface TicktData {
   ticket: number;
@@ -67,26 +68,18 @@ export class VentasDetalladoComponent {
     this.getCajeros();
 
 
-    //Asignamos la fecha inicial y final a la fecha actual con el formato correcto
-    const currentDate = new Date();
-    this.fechaInicial = currentDate.toISOString().slice(0, 10);
-    this.fechaFinal = currentDate.toISOString().slice(0, 10);
+    //Asignamos la fecha inicial y final al día actual (fecha local, no UTC)
+    const hoy = new Date();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    this.fechaInicial = `${hoy.getFullYear()}-${mm}-${dd}`;
+    this.fechaFinal = this.fechaInicial;
 
-    //! Datos de la API
-    this.apiService.getReporteVentasDetalle().subscribe((data: any) => {
-      console.log(data.data);
-      this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
-      this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
-      this.MatPaginatorIntl.previousPageLabel = 'Anterior';
-      this.dataSource = new MatTableDataSource(data.data);
-
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+    //Al entrar solo cargamos lo del día actual
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.cajero, false);
   }
   cambioCajero(event: any) {
     this.cajero= event.target.value;
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
   }
   cajeros: any[] = [];
   cajero: number = 0;
@@ -168,35 +161,12 @@ export class VentasDetalladoComponent {
   validarFechaInicial(event: any) {
     this.fechaInicial = event.value;
 
-    //Si las fechas son iguales, mostramos un mensaje de adventencia
-      if (this.fechaFinal == this.fechaInicial) {
-      // this.toast.warning('Selecciona fecha final para filtrar tabla.', 'Advertencia', {
-      //   positionClass: 'toast-bottom-center',
-      //   timeOut: 5000,
-      // });
-      // return;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-
-    }
-
-    //Si la fecha final es mayor a la fecha inicial, APLICAMOS EL FILTRADO.
-    if (this.fechaFinal > this.fechaInicial) {
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-
-      // this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
-      //   positionClass: 'toast-bottom-center',
-      //   timeOut: 9000,
-      //   closeButton: true,
-      // });
-    }
-
     //Si la fecha inicial es mayor a la fecha final, mostramos un mensaje de error
     if (this.fechaInicial > this.fechaFinal) {
       this.toast.warning('La fecha FINAL no puede ser menor.', 'Advertencia', {
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
-      return;
     }
   }
 
@@ -219,15 +189,26 @@ export class VentasDetalladoComponent {
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
-      return;
     }
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
   }
 
-  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string) {
-    this.apiService
-      .getReporteVentasDetalle(fecjaInicial, fechaFinal, this.sucursal, this.cajero)
+  //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
+  aplicarFiltros() {
+    if (!this.fechaInicial || !this.fechaFinal || this.fechaFinal < this.fechaInicial) {
+      this.toast.error('Revisa el rango de fechas.', 'Error', {
+        positionClass: 'toast-bottom-center',
+        timeOut: 5000,
+      });
+      return;
+    }
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.cajero);
+  }
+
+  private consulta?: Subscription;
+  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string, cajero: any = 0, avisar: boolean = true) {
+    this.consulta?.unsubscribe();
+    this.consulta = this.apiService
+      .getReporteVentasDetalle(fecjaInicial, fechaFinal, this.sucursal, cajero)
       .subscribe((data: any) => {
         this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
         this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
@@ -238,14 +219,16 @@ export class VentasDetalladoComponent {
         this.dataSource.sort = this.sort;
 
         //Mostramos un toast en medio de la pantalla para indicar que se ha filtrado la tabla
-        this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
-          /// Mostramos en la parte inferior y en el centro
-          positionClass: 'toast-bottom-center',
-          // Tiempo de duración del toast
-          timeOut: 9000,
-          // Mostramos el botón de cerrar
-          closeButton: true,
-        });
+        if (avisar) {
+          this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
+            /// Mostramos en la parte inferior y en el centro
+            positionClass: 'toast-bottom-center',
+            // Tiempo de duración del toast
+            timeOut: 9000,
+            // Mostramos el botón de cerrar
+            closeButton: true,
+          });
+        }
       });
   }
 
@@ -263,7 +246,8 @@ export class VentasDetalladoComponent {
     }
     cambioSucusal(event: any) {
       this.sucursal = event.target.value;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
+      this.cajero = 0; //los cajeros son por sucursal; se recargan abajo
+      this.getCajeros();
     }
 
   // Generar datos de prueba para cada columna

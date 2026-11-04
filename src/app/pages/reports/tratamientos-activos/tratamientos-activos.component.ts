@@ -11,6 +11,7 @@ import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { Licencia } from '../../../interfaces/Licencia';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -64,23 +65,14 @@ export class CobroMembresiasComponent {
     //! Obtener los tipos de suscripciones
     this.getTipoTratamiento();
 
-    //Asignamos la fecha inicial y final a la fecha actual con el formato correcto
-    const currentDate = new Date();
-    this.fechaInicial = currentDate.toISOString().slice(0, 10);
-    this.fechaFinal = currentDate.toISOString().slice(0, 10);
+    //Por defecto: del 1° del mes actual al día de hoy (fecha local, no UTC)
+    const hoy = new Date();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    this.fechaInicial = `${hoy.getFullYear()}-${mm}-01`;
+    this.fechaFinal = `${hoy.getFullYear()}-${mm}-${dd}`;
 
-    //! Datos de la API
-    this.apiService.getCobroMembresias().subscribe((data: any) => {
-      this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
-      this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
-      this.MatPaginatorIntl.previousPageLabel = 'Anterior';
-      this.dataSource = new MatTableDataSource(data.data);
-
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
-
-
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tipoMovimiento, false);
   }
 
 
@@ -170,29 +162,12 @@ getTipoTratamiento(){
   validarFechaInicial(event: any) {
     this.fechaInicial = event.value;
 
-    //Si las fechas son iguales, mostramos un mensaje de adventencia
-      if (this.fechaFinal == this.fechaInicial) {
-      // this.toast.warning('Selecciona fecha final para filtrar tabla.', 'Advertencia', {
-      //   positionClass: 'toast-bottom-center',
-      //   timeOut: 5000,
-      // });
-      // return;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-
-    }
-
-    //Si la fecha final es mayor a la fecha inicial, APLICAMOS EL FILTRADO.
-    if (this.fechaFinal > this.fechaInicial) {
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
-    }
-
     //Si la fecha inicial es mayor a la fecha final, mostramos un mensaje de error
     if (this.fechaInicial > this.fechaFinal) {
       this.toast.warning('La fecha FINAL no puede ser menor.', 'Advertencia', {
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
-      return;
     }
   }
 
@@ -215,18 +190,28 @@ getTipoTratamiento(){
         positionClass: 'toast-bottom-center',
         timeOut: 5000,
       });
-      return;
     }
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
   }
 
-  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string , tmovimiento: any = null, tsuscripcion: any = null) {
+  //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
+  aplicarFiltros() {
+    if (!this.fechaInicial || !this.fechaFinal || this.fechaFinal < this.fechaInicial) {
+      this.toast.error('Revisa el rango de fechas.', 'Error', {
+        positionClass: 'toast-bottom-center',
+        timeOut: 5000,
+      });
+      return;
+    }
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tipoMovimiento);
+  }
 
-        //! 999 es igual a TODOS, para que no entre nignun filtro.
+  private consulta?: Subscription;
+  //tmovimiento = código del tratamiento (0/null = todos); el servicio aún recibe tsuscripcion, siempre null
+  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string , tmovimiento: any = null, avisar: boolean = true) {
 
-    this.apiService
-      .getCobroMembresias(fecjaInicial, fechaFinal, this.sucursal, tmovimiento, tsuscripcion)
+    this.consulta?.unsubscribe();
+    this.consulta = this.apiService
+      .getCobroMembresias(fecjaInicial, fechaFinal, this.sucursal, tmovimiento, null)
       .subscribe((data: any) => {
         this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
         this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
@@ -237,14 +222,16 @@ getTipoTratamiento(){
         this.dataSource.sort = this.sort;
 
         //Mostramos un toast en medio de la pantalla para indicar que se ha filtrado la tabla
-        this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
-          /// Mostramos en la parte inferior y en el centro
-          positionClass: 'toast-bottom-center',
-          // Tiempo de duración del toast
-          timeOut: 9000,
-          // Mostramos el botón de cerrar
-          closeButton: true,
-        });
+        if (avisar) {
+          this.toast.success('Se ha filtrado la tabla.', 'Filtrado', {
+            /// Mostramos en la parte inferior y en el centro
+            positionClass: 'toast-bottom-center',
+            // Tiempo de duración del toast
+            timeOut: 9000,
+            // Mostramos el botón de cerrar
+            closeButton: true,
+          });
+        }
       });
   }
 
@@ -263,26 +250,16 @@ getTipoTratamiento(){
     }
     cambioSucusal(event: any) {
       this.sucursal = event.target.value;
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal);
+      this.tipoMovimiento = 0; //los tratamientos son por sucursal; se recargan abajo
+      this.getTipoTratamiento();
     }
 
-
-    tipoSuscripcion:any = 0;
-    cambioTipoSuscripcion(event: any) {
-      this.tipoSuscripcion = event.target.value;
-      // console.log('TIPO DE MOVIMIENTO ELEGIDO: ',this.tipoMovimiento);
-      // console.log('TIPO DE SUSCRIPCION ELEGIDA: ',this.tipoSuscripcion);
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tipoMovimiento, this.tipoSuscripcion);
-    }
-
+    //Tratamiento elegido (el selector "Selecciona Tratamiento" usa este handler)
     tipoMovimiento:any = 0;
     cambioTipoMovimiento(event: any) {
-      this.tipoMovimiento = event.target.value;
-      // console.log('TIPO DE MOVIMIENTO ELEGIDO: ',this.tipoMovimiento);
-      // console.log('TIPO DE SUSCRIPCION ELEGIDA: ',this.tipoSuscripcion);
-      if(this.tipoSuscripcion == 0) {this.tipoSuscripcion = null;}
-
-      this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tipoMovimiento, this.tipoSuscripcion);
+      //La opción "TODOS" trae value="null" (texto): se guarda como 0 (= todos)
+      const valor = event.target.value;
+      this.tipoMovimiento = valor === 'null' ? 0 : valor;
     }
 
 }
