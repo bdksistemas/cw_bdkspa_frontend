@@ -26,12 +26,14 @@ export class ApiServiceService  {
   // Se conserva porque los métodos la llaman; el getter httpOptions ya arma los headers.
   setHeaders(){}
 
-  getInitialData($sucursal: number = sucursalInicial(), $usuario: string = localStorage.getItem('id_usuario')!){
+  getInitialData($sucursal: number = sucursalInicial(), $fechaInicial: any = null, $fechaFinal: any = null, $usuario: string = localStorage.getItem('id_usuario')!){
     this.setHeaders();
     let url = 'dashboard/datosDashboard'
     let data = {
       'id_usuario': $usuario,
-      'sucursal': $sucursal
+      'sucursal': $sucursal,
+      'fecha_inicial': $fechaInicial,
+      'fecha_final': $fechaFinal
     }
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
@@ -277,17 +279,6 @@ export class ApiServiceService  {
     }
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
-
-  getTratamientosSalas( $sucursal: number = sucursalInicial(), $usuario: string = localStorage.getItem('id_usuario')!){
-    let url = 'dashboard/tratamientosSalas'
-
-    let data = {
-      'id_usuario': $usuario,
-      'sucursal': $sucursal,
-    }
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-  }
-
 
   getTipoTratamiento(sucursal:any =sucursalInicial()){
     let url = 'general/getTipoTratamientos'
