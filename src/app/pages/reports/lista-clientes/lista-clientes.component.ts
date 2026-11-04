@@ -11,11 +11,11 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../auth/auth.service';
 import { Licencia } from '../../../interfaces/Licencia';
 @Component({
-  selector: 'app-socios-activos',
-  templateUrl: './socios-activos.component.html',
-  styleUrl: './socios-activos.component.css'
+  selector: 'app-lista-clientes',
+  templateUrl: './lista-clientes.component.html',
+  styleUrl: './lista-clientes.component.css'
 })
-export class SociosActivosComponent {
+export class ListaClientesComponent {
   verde: string = 'var(--verde)';
   titulo: string = 'Reporte de Clientes - Activos';
 
@@ -182,7 +182,7 @@ export class SociosActivosComponent {
   }
   traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string, categoria:number =0) {
     this.apiService
-      .getListaSociosActivos(fecjaInicial, fechaFinal, this.sucursal, categoria)
+      .getListaClientes(fecjaInicial, fechaFinal, this.sucursal, categoria)
       .subscribe((data: any) => {
 
         this.obtenerCategorias();
@@ -235,7 +235,7 @@ export class SociosActivosComponent {
     this.fechaFinal = currentDate.toISOString().slice(0, 10);
 
     //! Datos de la API
-    this.apiService.getListaSociosActivos().subscribe((data: any) => {
+    this.apiService.getListaClientes().subscribe((data: any) => {
       this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
       this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
       this.MatPaginatorIntl.previousPageLabel = 'Anterior';
@@ -244,46 +244,5 @@ export class SociosActivosComponent {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
-  }
-  // Generar datos de prueba para cada columna
-  testData: any[] = [];
-  dataPrueba() {
-    for (let i = 1; i <= 100; i++) {
-      const rowData: any = {};
-      this.displayedColumns.forEach((column) => {
-        switch (column) {
-
-          case 'IDSocio':
-            rowData[column] = i;
-            break;
-          case 'NombreSocio':
-            rowData[column] = `Socio ${i}`;
-            break;
-          case 'TipoMembresia':
-            rowData[column] = `Membresia ${i}`;
-            break;
-          case 'Importe':
-            rowData[column] = Math.floor(Math.random() * 1000);
-            break;
-          case 'FechaProxPago':
-            rowData[column] = new Date().toISOString().slice(0, 10);
-            break;
-          case 'NivelSocio':
-            rowData[column] = `Nivel ${i}`;
-            break;
-          case 'FechaIngreso':
-            rowData[column] = new Date().toISOString().slice(0, 10);
-            break;
-          case 'Saldo':
-            rowData[column] = Math.floor(Math.random() * 1000);
-            break;
-
-          default:
-            rowData[column] = 'N/A';
-            break;
-        }
-      });
-      this.testData.push(rowData);
-    }
   }
 }

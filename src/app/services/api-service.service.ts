@@ -204,7 +204,7 @@ export class ApiServiceService  {
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
 
-
+
 
 
   getCajeros(sucursal:any){
@@ -223,8 +223,8 @@ export class ApiServiceService  {
 
 
 
-  getListaSociosActivos($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = 1, categoria:number =0){
-    let url = 'rsocios/getListaSociosActivos'
+  getListaClientes($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = 1, categoria:number =0){
+    let url = 'rclientes/getListaClientes'
     let data = {
       'fecha_inicial': $fechaInicial,
       'fecha_final': $fechaFinal,

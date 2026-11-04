@@ -19,7 +19,7 @@ import { BannerPublicitarioComponent } from './banner-publicitario/banner-public
 import { autorizationGuard } from '../guards/autorization.guard';
 import { CobroMembresiasComponent } from './reports/tratamientos-activos/tratamientos-activos.component';
 import { VentasCreditoComponent } from './reports/ventas-credito/ventas-credito.component';
-import { SociosActivosComponent } from './reports/socios-activos/socios-activos.component';
+import { ListaClientesComponent } from './reports/lista-clientes/lista-clientes.component';
 import { SalidasEfectivoComponent } from './reports/salidas-efectivo/salidas-efectivo.component';
 import { AgendaGeneralComponent } from './reports/agenda-general/agenda-general.component';
 import { AgendaSalaComponent } from './reports/agenda-sala/agenda-sala.component';
@@ -84,10 +84,10 @@ const routes: Routes = [
         canActivate: [autorizationGuard]
       },
 
-      // Socios
+      // Clientes
       {
-        path: 'socios/socios-activos',
-        component: SociosActivosComponent,
+        path: 'clientes/lista-clientes',
+        component: ListaClientesComponent,
         data: { animation: 'fadeIn' },
         canActivate: [autorizationGuard]
       },

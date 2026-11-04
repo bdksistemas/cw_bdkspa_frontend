@@ -146,10 +146,7 @@ export class PagesComponent {
       titulo: 'CLIENTES',
       icono: 'fas fa-warehouse',
       submenu: [
-        { titulo: 'Lista de Clientes', url: 'socios/socios-activos', icon: 'far fa-circle' },
-        // { titulo: 'Socios por Clase', url: 'socios/socios-clase', icon: 'far fa-circle' },
-        // { titulo: 'Reporte de Asistencia', url: 'socios/socios-asistencia', icon: 'far fa-circle' },
-        // { titulo: 'Reporte de Inscripciones', url: 'socios/socios-inscripciones', icon: 'far fa-circle' },
+        { titulo: 'Lista de Clientes', url: 'clientes/lista-clientes', icon: 'far fa-circle' },
       ]
     },
     {
