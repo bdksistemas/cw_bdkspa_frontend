@@ -288,47 +288,6 @@ export class ApiServiceService  {
   }
 
 
-  getAgendaGeneral(fechaInicial:any = null, fechaFinal:any= null,sucursal:any = 1,  sala:any= null,usuario:any = null){
-    let url = 'rtickets/agendaGeneral'
-    let data = {
-      'sucursal': sucursal,
-      'fecha_inicial': fechaInicial,
-      'fecha_final': fechaFinal,
-      'sala': sala,
-      'id_usuario': usuario,
-    }
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-
-  }
-  //Agenda Por Sala:
-  getAgendaSala(sucursal:any = 1, fechaInicial:any = null, fechaFinal:any= null, sala:any= null,usuario:any = null){
-    let url = 'rtickets/agendaPorSala'
-    let data = {
-      'sucursal': sucursal,
-      'fecha_inicial': fechaInicial,
-      'fecha_final': fechaFinal,
-      'sala': sala,
-      'id_usuario': usuario,
-    }
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-
-  }
-
-  //Agenda por Empleado:
-  getAgendaEmpleado(sucursal:any = 1, fechaInicial:any = null, fechaFinal:any= null, sala:any= null,usuario:any = null){
-    let url = 'rtickets/agendaEmpleado'
-    let data = {
-      'sucursal': sucursal,
-      'fecha_inicial': fechaInicial,
-      'fecha_final': fechaFinal,
-      'empleado': usuario,
-      'id_usuario': usuario,
-      'sala': sala
-    }
-    return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
-
-  }
-
   getTipoTratamiento(sucursal:any =1){
     let url = 'general/getTipoTratamientos'
     let data = {
