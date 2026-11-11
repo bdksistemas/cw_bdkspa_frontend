@@ -5,6 +5,7 @@ import { environment } from '../../enviroments/enviroment';
 import { Router } from '@angular/router';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { AuthService } from '../auth/auth.service';
+import { SucursalService } from '../services/sucursal.service';
 
 @Component({
   selector: 'app-pages',
@@ -66,10 +67,14 @@ export class PagesComponent {
   inicialUsuario = 'B';
   esEscritorio = true; // sidebar fijo desde 992px, drawer en móvil
 
-  constructor(public router: Router, private AuthService: AuthService, private cdr: ChangeDetectorRef, breakpoints: BreakpointObserver) {
+  constructor(public router: Router, private AuthService: AuthService, public sucursales: SucursalService, private cdr: ChangeDetectorRef, breakpoints: BreakpointObserver) {
     this.tituloProyecto = environment.TITULO_PROYECTO;
     this.nombreUsuario = environment.NOMBRE_USUARIO_SISTEMA;
     breakpoints.observe('(min-width: 992px)').subscribe(r => this.esEscritorio = r.matches);
+  }
+
+  cambiarSucursal(event: Event) {
+    this.sucursales.seleccionar((event.target as HTMLSelectElement).value);
   }
 
   cerrarEnMovil() {
@@ -115,12 +120,7 @@ export class PagesComponent {
     {
       titulo: 'AGENDA',
       icono: 'fas fa-calendar',
-      submenu: [
-        { titulo: 'Agenda General', url: 'agenda/agenda-general', icon: 'far fa-circle' },
-        { titulo: 'Agenda Por Sala', url: 'agenda/agenda-sala', icon: 'far fa-circle' },
-        { titulo: 'Agenda Por Empleado', url: 'agenda/agenda-empleado', icon: 'far fa-circle' },
-
-      ]
+      url: 'agenda', // enlace directo, sin submenú
     },
     {
       titulo: 'REPORTES',

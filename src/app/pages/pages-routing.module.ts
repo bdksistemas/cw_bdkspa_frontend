@@ -7,6 +7,7 @@ import { authGuard } from '../guards/auth.guard';
 import { TicketsComponent } from './reports/tickets/tickets.component';
 import { IngresosComponent } from './reports/ingresos/ingresos.component';
 import { VentasDetalladoComponent } from './reports/ventas-detallado/ventas-detallado.component';
+import { AgendaComponent } from './agenda/agenda.component';
 import { TablaDatosComponent } from './tabla/tabla-datos.component';
 import { VentasProductoComponent } from './reports/ventas-producto/ventas-producto.component';
 import { VentasCategoriaComponent } from './reports/ventas-categoria/ventas-categoria.component';
@@ -21,9 +22,6 @@ import { CobroMembresiasComponent } from './reports/tratamientos-activos/tratami
 import { VentasCreditoComponent } from './reports/ventas-credito/ventas-credito.component';
 import { ListaClientesComponent } from './reports/lista-clientes/lista-clientes.component';
 import { SalidasEfectivoComponent } from './reports/salidas-efectivo/salidas-efectivo.component';
-import { AgendaGeneralComponent } from './reports/agenda-general/agenda-general.component';
-import { AgendaSalaComponent } from './reports/agenda-sala/agenda-sala.component';
-import { AgendaEmpleadoComponent } from './reports/agenda-empleado/agenda-empleado.component';
 
 const routes: Routes = [
   {
@@ -142,22 +140,9 @@ const routes: Routes = [
       },
 
       //!AGENDA
-
       {
-        path: 'agenda/agenda-general',
-        component: AgendaGeneralComponent,
-        data: { animation: 'fadeIn' },
-        canActivate: [autorizationGuard]
-      },
-      {
-        path: 'agenda/agenda-sala',
-        component: AgendaSalaComponent,
-        data: { animation: 'fadeIn' },
-        canActivate: [autorizationGuard]
-      },
-      {
-        path: 'agenda/agenda-empleado',
-        component: AgendaEmpleadoComponent,
+        path: 'agenda',
+        component: AgendaComponent,
         data: { animation: 'fadeIn' },
         canActivate: [autorizationGuard]
       },

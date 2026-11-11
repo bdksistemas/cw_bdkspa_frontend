@@ -167,7 +167,18 @@
   color: var(--ink);
 }
 .topbar-user { display: flex; align-items: center; gap: 12px; }
-.topbar-user-nombre { font-size: 14px; font-weight: 500; color: var(--muted); }
+.topbar-sucursal {
+  max-width: 260px;
+  padding: 6px 28px 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background-color: var(--white);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-overflow: ellipsis;
+}
+.topbar-sucursal:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .router-container { height: calc(100vh - 104px); height: calc(100dvh - 104px); }
 
@@ -190,7 +201,7 @@
 /* ---------- Móvil ---------- */
 @media (max-width: 991px) {
   .topbar { padding-right: 12px; }
-  .topbar-user-nombre { display: none; }
+  .topbar-sucursal { max-width: 150px; }
   .topbar-titulo { font-size: 18px; }
 }
 @media (max-width: 568px) {

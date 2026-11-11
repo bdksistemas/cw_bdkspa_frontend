@@ -10,8 +10,8 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { Licencia } from '../../../interfaces/Licencia';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
+import { alCambiarSucursal } from '../../../services/sucursal.service';
 
 export interface TicktData {
   ticket: number;
@@ -72,7 +72,6 @@ export class AlmacenExistenciasComponent {
   }
 
   ngOnInit() {
-    this.obtenerSucursales();
     //Existencias es una foto del inventario: sin fechas, solo categoría y sucursal
     this.traerDatosFiltradosAPI(this.categoria, false);
   }
@@ -161,6 +160,7 @@ export class AlmacenExistenciasComponent {
     return !isNaN(parseFloat(value)) && isFinite(value);
   }
   sucursal: number = sucursalInicial();
+  private _alCambiarSucursal = alCambiarSucursal((s) => this.cambioSucusal(s));
 
   //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
   aplicarFiltros() {
@@ -199,20 +199,8 @@ export class AlmacenExistenciasComponent {
       });
   }
 
-  //Obtener sucursales
-  sucursales: Licencia[] = [];
-  obtenerSucursales() {
-    //Verificamos si tenemos las sucursales dentro del authService
-    let sucursales = this.authService.getLicencias();
-    if (sucursales != null || sucursales != undefined) {
-      this.sucursales = sucursales;
-    } else {
-      //Si no los tenemos en el authService, los obtenemos del localStorage.
-      this.sucursales = this.authService.setLicencias();
-    }
-  }
-  cambioSucusal(event: any) {
-    this.sucursal = event.target.value;
+  cambioSucusal(valor: any) {
+      this.sucursal = Number(valor);
     //Las categorías dependen de la sucursal: reiniciamos el filtro y recargamos el catálogo
     this.categoria = 0;
     this.categorias = [];

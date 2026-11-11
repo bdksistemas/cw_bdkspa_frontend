@@ -10,7 +10,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
-import { Licencia } from '../../../interfaces/Licencia';
+import { alCambiarSucursal } from '../../../services/sucursal.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -74,7 +74,6 @@ export class GastosGeneralComponent {
     });
   }
   ngOnInit() {
-    this.obtenerSucursales();
     this.getProveedores();
     // this.getConceptos();
 
@@ -172,6 +171,7 @@ export class GastosGeneralComponent {
 
   //Variables para fecha inicial y fecha final
   sucursal: number = sucursalInicial();
+  private _alCambiarSucursal = alCambiarSucursal((s) => this.cambioSucusal(s));
   fechaInicial: string = '';
   fechaFinal: string = '';
   validarFechaInicial(event: any) {
@@ -282,20 +282,8 @@ export class GastosGeneralComponent {
       });
   }
 
-  //Obtener sucursales
-  sucursales: Licencia[] = [];
-  obtenerSucursales() {
-    //Verificamos si tenemos las sucursales dentro del authService
-    let sucursales = this.authService.getLicencias();
-    if (sucursales != null || sucursales != undefined) {
-      this.sucursales = sucursales;
-    } else {
-      //Si no los tenemos en el authService, los obtenemos del localStorage.
-      this.sucursales = this.authService.setLicencias();
-    }
-  }
-  cambioSucusal(event: any) {
-    this.sucursal = event.target.value;
+  cambioSucusal(valor: any) {
+      this.sucursal = Number(valor);
     //Proveedores y conceptos son por sucursal: reiniciamos y recargamos
     this.provedor = 0;
     this.concepto = 0;

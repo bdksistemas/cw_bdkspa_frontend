@@ -1,0 +1,104 @@
+<div class="container-all">
+  <app-titulo-pagina titulo="Agenda"></app-titulo-pagina>
+  <p class="agenda-sub">Calendario semanal de solo lectura. Haz clic en una cita para ver su detalle.</p>
+
+  <div class="agenda-barra">
+    <div class="agenda-nav">
+      <button type="button" class="agenda-btn agenda-btn-icono" aria-label="Semana anterior" (click)="semanaAnterior()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button type="button" class="agenda-btn" [disabled]="esSemanaActual" (click)="irAHoy()">Hoy</button>
+      <button type="button" class="agenda-btn agenda-btn-icono" aria-label="Semana siguiente" (click)="semanaSiguiente()">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <span class="agenda-rango">{{ rangoTexto }}</span>
+    </div>
+
+    <div class="agenda-filtros">
+      <select class="agenda-campo" aria-label="Sala" (change)="cambioSala($event)">
+        <option value="0" [selected]="salaSeleccionada === 0">Todas las salas</option>
+        @for (s of salas; track s.sala) {
+          <option [value]="s.sala" [selected]="salaSeleccionada === s.sala">{{ s.nomsala }}</option>
+        }
+      </select>
+      <select class="agenda-campo" aria-label="Empleado" (change)="cambioEmpleado($event)">
+        <option value="0" [selected]="empleadoSeleccionado === 0">Todo el equipo</option>
+        @for (e of empleados; track e.usuario) {
+          <option [value]="e.usuario" [selected]="empleadoSeleccionado === e.usuario">{{ e.nombre }}</option>
+        }
+      </select>
+      <div class="agenda-buscar">
+        <i class="fas fa-search"></i>
+        <input type="search" class="agenda-campo" placeholder="Cliente o tratamiento" [value]="texto" (input)="cambioTexto($event)" />
+      </div>
+    </div>
+  </div>
+
+  @if (error) {
+    <p class="agenda-aviso agenda-aviso-error">No se pudo cargar la agenda. Intenta de nuevo.</p>
+  } @else if (cargando) {
+    <p class="agenda-aviso">Cargando agenda…</p>
+  } @else if (total === 0) {
+    <p class="agenda-aviso">No hay citas en esta semana con los filtros actuales.</p>
+  }
+
+  <div class="agenda-scroll">
+    <div class="agenda-cal" [style.min-width.px]="anchoMin">
+      <div class="agenda-cabecera" [style.grid-template-columns]="gridCols">
+        <div class="agenda-esq"></div>
+        @for (d of dias; track d.fecha) {
+          <div class="agenda-dia-titulo" [class.hoy]="d.hoy">{{ d.etiqueta }}</div>
+        }
+      </div>
+
+      <div class="agenda-cuerpo" [style.grid-template-columns]="gridCols">
+        <div class="agenda-horas" [style.height.px]="altoColumna">
+          @for (h of horas; track h) {
+            <div class="agenda-hora" [style.height.px]="pxPorHora"><span>{{ h }}</span></div>
+          }
+        </div>
+
+        @for (d of dias; track d.fecha) {
+          <div class="agenda-dia" [class.hoy]="d.hoy" [style.height.px]="altoColumna" [style.--hora-alto.px]="pxPorHora">
+            @for (c of d.citas; track c.idagenda) {
+              <button
+                type="button"
+                class="agenda-cita"
+                [class.corta]="c.alto < 48"
+                [style.top.px]="c.top"
+                [style.height.px]="c.alto"
+                [style.left.%]="c.izq"
+                [style.width.%]="c.ancho"
+                [style.background]="c.color.bg"
+                [style.border-left-color]="c.color.borde"
+                (click)="abrir(c)"
+              >
+                <span class="agenda-cita-hora">{{ rangoHora(c) }}</span>
+                <span class="agenda-cita-cliente">{{ c.cliente }}</span>
+                <span class="agenda-cita-trat">{{ c.tratamiento }}</span>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (detalle) {
+  <div class="agenda-fondo" (click)="cerrar()">
+    <div class="agenda-modal" role="dialog" aria-modal="true" aria-label="Detalle de la cita" (click)="$event.stopPropagation()">
+      <button type="button" class="agenda-cerrar" aria-label="Cerrar" (click)="cerrar()"><i class="fas fa-times"></i></button>
+      <h3 class="agenda-modal-titulo">{{ detalle.cliente || 'Sin cliente' }}</h3>
+      <p class="agenda-modal-trat">{{ detalle.tratamiento || 'Sin tratamiento' }}</p>
+      <dl class="agenda-datos">
+        <dt>Fecha</dt><dd>{{ fechaLarga(detalle.fecha) }}</dd>
+        <dt>Horario</dt><dd>{{ rangoHora(detalle) }} ({{ detalle.minutos }} min)</dd>
+        <dt>Sala</dt><dd>{{ detalle.nomsala || '—' }}</dd>
+        <dt>Empleado</dt><dd>{{ detalle.nomempleado || 'Sin asignar' }}</dd>
+        <dt>Sesión</dt><dd>{{ detalle.sesion > 0 ? detalle.sesion : '—' }}</dd>
+        <dt>Comentarios</dt><dd>{{ detalle.obs || 'Sin comentarios' }}</dd>
+      </dl>
+    </div>
+  </div>
+}

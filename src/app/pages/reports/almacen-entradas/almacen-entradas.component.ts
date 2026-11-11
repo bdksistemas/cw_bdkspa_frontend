@@ -10,8 +10,8 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { Licencia } from '../../../interfaces/Licencia';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
+import { alCambiarSucursal } from '../../../services/sucursal.service';
 
 export interface TicktData {
   ticket: number;
@@ -72,7 +72,6 @@ export class AlmacenEntradasComponent {
   }
 
   ngOnInit() {
-    this.obtenerSucursales();
     this.getProveedores();
 
 
@@ -249,21 +248,10 @@ export class AlmacenEntradasComponent {
       });
   }
 
-    //Obtener sucursales
     sucursal:any = sucursalInicial();
-    sucursales: Licencia[] = [];
-    obtenerSucursales() {
-      //Verificamos si tenemos las sucursales dentro del authService
-      let sucursales = this.authService.getLicencias();
-      if (sucursales != null || sucursales != undefined) {
-        this.sucursales = sucursales;
-      } else {
-        //Si no los tenemos en el authService, los obtenemos del localStorage.
-        this.sucursales = this.authService.setLicencias();
-      }
-    }
-    cambioSucusal(event: any) {
-      this.sucursal = event.target.value;
+  private _alCambiarSucursal = alCambiarSucursal((s) => this.cambioSucusal(s));
+    cambioSucusal(valor: any) {
+      this.sucursal = Number(valor);
       //Los proveedores dependen de la sucursal: reiniciamos el filtro y recargamos el catálogo
       this.provedor = 0;
       this.provedores = [];

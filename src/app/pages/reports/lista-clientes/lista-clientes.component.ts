@@ -10,7 +10,7 @@ import * as xlsx from 'xlsx';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
-import { Licencia } from '../../../interfaces/Licencia';
+import { alCambiarSucursal } from '../../../services/sucursal.service';
 @Component({
   selector: 'app-lista-clientes',
   templateUrl: './lista-clientes.component.html',
@@ -128,6 +128,7 @@ export class ListaClientesComponent {
 
   //Variables para fecha inicial y fecha final
   sucursal: number = sucursalInicial();
+  private _alCambiarSucursal = alCambiarSucursal((s) => this.cambioSucusal(s));
   fechaInicial: string = '';
   fechaFinal: string = '';
   validarFechaInicial(event: any) {
@@ -194,26 +195,13 @@ export class ListaClientesComponent {
         }
       });
   }
-    //Obtener sucursales
-    sucursales: Licencia[] = [];
-    obtenerSucursales() {
-      //Verificamos si tenemos las sucursales dentro del authService
-      let sucursales = this.authService.getLicencias();
-      if (sucursales != null || sucursales != undefined) {
-        this.sucursales = sucursales;
-      } else {
-        //Si no los tenemos en el authService, los obtenemos del localStorage.
-        this.sucursales = this.authService.setLicencias();
-      }
-    }
-    cambioSucusal(event: any) {
-      this.sucursal = event.target.value;
+    cambioSucusal(valor: any) {
+      this.sucursal = Number(valor);
       this.categoriaSeleccionada = 0; //las categorías son por sucursal; se recargan abajo
       this.obtenerCategorias();
     }
   ngOnInit() {
 
-    this.obtenerSucursales();
     this.obtenerCategorias();
 
 

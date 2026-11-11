@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PagesRoutingModule } from './pages-routing.module';
+import { AgendaComponent } from './agenda/agenda.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ToasterComponent } from './toaster/toaster.component';
 import { PagesComponent } from './pages.component';
@@ -25,15 +26,13 @@ import { CobroMembresiasComponent } from './reports/tratamientos-activos/tratami
 import { VentasCreditoComponent } from './reports/ventas-credito/ventas-credito.component';
 import { ListaClientesComponent } from './reports/lista-clientes/lista-clientes.component';
 import { SalidasEfectivoComponent } from './reports/salidas-efectivo/salidas-efectivo.component';
-import { AgendaGeneralComponent } from './reports/agenda-general/agenda-general.component';
-import { AgendaSalaComponent } from './reports/agenda-sala/agenda-sala.component';
-import { AgendaEmpleadoComponent } from './reports/agenda-empleado/agenda-empleado.component';
 
 
 
 @NgModule({
   declarations: [
     DashboardComponent,
+    AgendaComponent,
     ToasterComponent,
     PagesComponent,
     TicketsComponent,
@@ -52,9 +51,6 @@ import { AgendaEmpleadoComponent } from './reports/agenda-empleado/agenda-emplea
     VentasCreditoComponent,
     ListaClientesComponent,
     SalidasEfectivoComponent,
-    AgendaGeneralComponent,
-    AgendaSalaComponent,
-    AgendaEmpleadoComponent,
   ],
   imports: [
     CommonModule,

@@ -10,8 +10,8 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { Licencia } from '../../../interfaces/Licencia';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
+import { alCambiarSucursal } from '../../../services/sucursal.service';
 
 export interface TicktData {
   ticket: number;
@@ -67,7 +67,6 @@ export class AlmacenSalidasComponent {
   }
 
   ngOnInit() {
-    this.obtenerSucursales();
 
     //Por defecto: del 1° del mes actual al día de hoy (fecha local, no UTC)
     const hoy = new Date();
@@ -152,6 +151,7 @@ export class AlmacenSalidasComponent {
 
   //Variables para fecha inicial y fecha final
   sucursal: number = sucursalInicial();
+  private _alCambiarSucursal = alCambiarSucursal((s) => this.cambioSucusal(s));
   fechaInicial: string = '';
   fechaFinal: string = '';
   validarFechaInicial(event: any) {
@@ -228,20 +228,8 @@ export class AlmacenSalidasComponent {
       });
   }
 
-  //Obtener sucursales
-  sucursales: Licencia[] = [];
-  obtenerSucursales() {
-    //Verificamos si tenemos las sucursales dentro del authService
-    let sucursales = this.authService.getLicencias();
-    if (sucursales != null || sucursales != undefined) {
-      this.sucursales = sucursales;
-    } else {
-      //Si no los tenemos en el authService, los obtenemos del localStorage.
-      this.sucursales = this.authService.setLicencias();
-    }
-  }
-  cambioSucusal(event: any) {
-    this.sucursal = event.target.value;
+  cambioSucusal(valor: any) {
+      this.sucursal = Number(valor);
   }
 
   // Generar datos de prueba para cada columna

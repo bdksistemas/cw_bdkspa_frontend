@@ -52,19 +52,6 @@
         </button>
       </div>
     </div>
-    <div class="info-box info-box-sucursales">
-      <span class="info-box-icon bg-blue elevation-1"><i class="fas fa-store"></i></span>
-
-      <div class="info-box-content">
-        <span class="info-box-text">SUCURSALES</span>
-        <select class="form-select" (change)="cambioSucusal($event)">
-          @for (item of sucursales; track $index) {
-            <option value="{{item.sucursal}}">{{item.empresa}} </option>
-          }
-        </select>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
   </div>
 
 
@@ -112,60 +99,21 @@
         </div>
       </div>
       <div class="card-body"  id="CventasPorHora" style="display: block !important;" >
-        <table class="table table-striped table-valign-middle" style="    width: 100% !important;
-        height: 100% !important;
-        overflow-x: scroll;
-        overflow-y: scroll;
-        display: flow-root;
-    ">
-          <thead>
-            <tr>
-              <th>Cliente</th>
-              <th>Tratamiento</th>
-              <th>Sala</th>
-              <th>Empleado</th>
-              <th>Fecha/Hora</th>
-
-            </tr>
-          </thead>
-          <tbody>
-
-           @for (item of asistenciasHoraData; track $index) {
-            <tr >
-              <td>
-                <small>
-                  <b>{{item.nomcliente}}</b>
-                </small>
-              </td>
-              <td>
-                <small>
-                  {{item.nomproducto}}
-                </small>
-              </td>
-              <td>
-                <small>{{item.nomsala}}</small>
-              </td>
-              <td>
-                <small>
-                  <span>
-                    {{item.nomempleado}}
-
-                  </span>
-                </small>
-              </td>
-              <td>
-                <small>
-                  <span>
-                    {{item.fecha | date: 'dd/MM/yyyy'}} {{item.hora_texto}}
-
-                  </span>
-                </small>
-              </td>
-            </tr>
-           }
-
-          </tbody>
-        </table>
+        <div class="cuentas-grid">
+          @for (item of asistenciasHoraData; track $index) {
+            <div class="cuenta-card">
+              <div class="cuenta-cliente">{{ item.nomcliente }}</div>
+              <div class="cita-tratamiento">{{ item.nomproducto }}</div>
+              <div class="cuenta-detalle">
+                <span><i class="far fa-calendar"></i> {{ item.fecha | date: 'dd/MM/yyyy' }} {{ item.hora_texto }}</span>
+                <span><i class="fas fa-door-open"></i> {{ item.nomsala }}</span>
+                <span><i class="far fa-user"></i> {{ item.nomempleado }}</span>
+              </div>
+            </div>
+          } @empty {
+            <p class="cuentas-vacio">No hay citas en el periodo.</p>
+          }
+        </div>
         <!-- <canvas id="asistenciasHoraChart" class="canvas-chart" ></canvas> -->
       </div>
       <!-- /.card-body -->
@@ -196,57 +144,20 @@
         </div>
       </div>
       <div class="card-body"  id="CventasPorHora" style="display: block !important;" >
-        <table class="table table-striped table-valign-middle" style="    width: 100% !important;
-        height: 100% !important;
-        overflow-x: scroll;
-        overflow-y: scroll;
-        display: flow-root;
-    ">
-          <thead style="width: 100% !important; ">
-            <tr>
-              <th>Cliente</th>
-              <th>Hora</th>
-              <th>Tiempo</th>
-              <th>Importe</th>
-
-            </tr>
-          </thead>
-          <tbody style=" width: 100% !important; ">
-
-           @for (item of metodosDePagoData; track $index) {
-            <tr >
-              <td>
-                <small>
-                  <b>{{item.nomcliente}}</b>
-                </small>
-              </td>
-              <td>
-                <small>
-                  {{item.feccta}}
-                </small>
-              </td>
-              <td>
-                <small>{{item.tiempo_abierto}}</small>
-              </td>
-              <td>
-                <small>
-                  <span>
-                    {{item.total | currency}}
-                  </span>
-                </small>
-              </td>
-              <!-- <td>
-                <small>
-                  <span>
-                    {{item.nomempleado}}
-                  </span>
-                </small>
-              </td> -->
-            </tr>
-           }
-
-          </tbody>
-        </table>
+        <div class="cuentas-grid">
+          @for (item of metodosDePagoData; track $index) {
+            <div class="cuenta-card">
+              <div class="cuenta-cliente">{{ item.nomcliente }}</div>
+              <div class="cuenta-importe">{{ item.total | currency }}</div>
+              <div class="cuenta-detalle">
+                <span><i class="far fa-clock"></i> {{ item.feccta }}</span>
+                <span><i class="fas fa-hourglass-half"></i> {{ tiempoAbierto(item.tiempo_abierto) }}</span>
+              </div>
+            </div>
+          } @empty {
+            <p class="cuentas-vacio">No hay cuentas abiertas.</p>
+          }
+        </div>
         <!-- <canvas id="asistenciasHoraChart" class="canvas-chart" ></canvas> -->
       </div>
       <!-- <div class="card-body"  id="CardmetodosDePago" >

@@ -138,3 +138,46 @@
 .daterangepicker td.in-range { background-color: rgba(163, 9, 9, 0.08); }
 .daterangepicker .drp-buttons .btn-success { background: var(--accent); border-color: var(--accent); }
 .daterangepicker .drp-buttons .btn-success:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+
+
+/* ---------- Cuentas abiertas: una tarjeta por cuenta ---------- */
+.cuentas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+.cuenta-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+}
+.cuenta-cliente {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.cuenta-importe {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--accent);
+}
+.cuenta-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.cuenta-detalle i { width: 14px; margin-right: 4px; }
+.cuentas-vacio { margin: 0; color: var(--muted); font-size: 14px; }
+.cita-tratamiento { font-size: 15px; font-weight: 600; color: var(--accent); overflow-wrap: anywhere; }

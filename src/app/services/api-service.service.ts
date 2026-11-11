@@ -296,11 +296,12 @@ export class ApiServiceService  {
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
 
-  getSalas(sucursal:any =sucursalInicial(), fechaInicial:any = null){
-    let url = 'general/obtenerSalas'
+  getAgendaSemana(sucursal:any = sucursalInicial(), fechaInicial:string, fechaFinal:string){
+    let url = 'general/agendaSemana'
     let data = {
       'sucursal': sucursal,
-      'fecha_inicial': fechaInicial
+      'fecha_inicial': fechaInicial,
+      'fecha_final': fechaFinal
     }
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }

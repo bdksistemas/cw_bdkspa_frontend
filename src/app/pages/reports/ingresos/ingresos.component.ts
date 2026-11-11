@@ -9,7 +9,7 @@ import * as xlsx from 'xlsx';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
-import { Licencia } from '../../../interfaces/Licencia';
+import { alCambiarSucursal } from '../../../services/sucursal.service';
 import { Subscription } from 'rxjs';
 
 
@@ -59,8 +59,6 @@ export class IngresosComponent {
 
   ngOnInit() {
 
-    //! Obtener las sucursales
-    this.obtenerSucursales();
 
     //! Obtener los tipos de suscripciones
     this.getTipoTratamiento();
@@ -248,21 +246,10 @@ getTipoTratamiento(){
       });
   }
 
-    //Obtener sucursales
     sucursal:any = sucursalInicial();
-    sucursales: Licencia[] = [];
-    obtenerSucursales() {
-      //Verificamos si tenemos las sucursales dentro del authService
-      let sucursales = this.authService.getLicencias();
-      if (sucursales != null || sucursales != undefined) {
-        this.sucursales = sucursales;
-      } else {
-        //Si no los tenemos en el authService, los obtenemos del localStorage.
-        this.sucursales = this.authService.setLicencias();
-      }
-    }
-    cambioSucusal(event: any) {
-      this.sucursal = event.target.value;
+  private _alCambiarSucursal = alCambiarSucursal((s) => this.cambioSucusal(s));
+    cambioSucusal(valor: any) {
+      this.sucursal = Number(valor);
       //Tratamientos y empleados son por sucursal: reiniciamos y recargamos catálogos
       this.tipoMovimiento = 0;
       this.empleadoSeleccionado = 0;

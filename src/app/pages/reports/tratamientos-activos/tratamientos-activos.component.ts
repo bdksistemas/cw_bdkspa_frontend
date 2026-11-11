@@ -9,8 +9,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
-import { Licencia } from '../../../interfaces/Licencia';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
+import { alCambiarSucursal } from '../../../services/sucursal.service';
 import { Subscription } from 'rxjs';
 
 
@@ -59,8 +59,6 @@ export class CobroMembresiasComponent {
 
   ngOnInit() {
 
-    //! Obtener las sucursales
-    this.obtenerSucursales();
 
     //! Obtener los tipos de suscripciones
     this.getTipoTratamiento();
@@ -235,21 +233,10 @@ getTipoTratamiento(){
       });
   }
 
-    //Obtener sucursales
     sucursal:any = sucursalInicial();
-    sucursales: Licencia[] = [];
-    obtenerSucursales() {
-      //Verificamos si tenemos las sucursales dentro del authService
-      let sucursales = this.authService.getLicencias();
-      if (sucursales != null || sucursales != undefined) {
-        this.sucursales = sucursales;
-      } else {
-        //Si no los tenemos en el authService, los obtenemos del localStorage.
-        this.sucursales = this.authService.setLicencias();
-      }
-    }
-    cambioSucusal(event: any) {
-      this.sucursal = event.target.value;
+  private _alCambiarSucursal = alCambiarSucursal((s) => this.cambioSucusal(s));
+    cambioSucusal(valor: any) {
+      this.sucursal = Number(valor);
       this.tipoMovimiento = 0; //los tratamientos son por sucursal; se recargan abajo
       this.getTipoTratamiento();
     }

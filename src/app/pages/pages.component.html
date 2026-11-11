@@ -64,7 +64,11 @@
       </button>
       <h1 class="topbar-titulo">Concentrador {{ tituloProyecto }}</h1>
       <div class="topbar-user">
-        <span class="topbar-user-nombre">{{ nombreUsuario }}</span>
+        <select class="topbar-sucursal" aria-label="Sucursal" (change)="cambiarSucursal($event)">
+          @for (item of sucursales.licencias; track item.sucursal) {
+            <option [value]="item.sucursal" [selected]="item.sucursal == sucursales.activa">{{ item.empresa }}</option>
+          }
+        </select>
         <span class="avatar">{{ inicialUsuario }}</span>
       </div>
     </header>

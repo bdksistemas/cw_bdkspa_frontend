@@ -15,10 +15,14 @@ import { environment } from '../../enviroments/enviroment';
 import { Licencia } from '../interfaces/Licencia';
 import jwt_decode, { jwtDecode } from 'jwt-decode'; // Importa la librería jwt-decode para decodificar tokens JWT
 
-// Sucursal con la que arrancan las pantallas: la primera licencia (la que muestra el selector), no un 1 fijo.
+// Sucursal con la que arrancan las pantallas: la elegida en la barra superior (si sigue siendo una licencia válida)
+// o, si no hay, la primera licencia.
 export function sucursalInicial(): number {
   try {
-    return Number(JSON.parse(localStorage.getItem('licencias') || '[]')[0]?.sucursal) || 1;
+    const licencias: any[] = JSON.parse(localStorage.getItem('licencias') || '[]');
+    const guardada = Number(localStorage.getItem('sucursal_activa'));
+    if (guardada && licencias.some((l) => Number(l.sucursal) === guardada)) return guardada;
+    return Number(licencias[0]?.sucursal) || 1;
   } catch {
     return 1;
   }

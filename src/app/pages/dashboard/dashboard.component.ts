@@ -2,8 +2,8 @@ import { AfterViewInit, Component, NgZone, OnDestroy, ViewEncapsulation } from '
 import { Chart } from 'chart.js';
 import { ApiServiceService } from '../../services/api-service.service';
 import { DdatosIniciales } from '../../interfaces/DdatosIniciales';
-import { Licencia } from '../../interfaces/Licencia';
-import { AuthService, sucursalInicial } from '../../auth/auth.service';
+import { sucursalInicial } from '../../auth/auth.service';
+import { alCambiarSucursal } from '../../services/sucursal.service';
 const salesData = [10, 20, 30, 25, 40, 35, 50, 45, 60, 55, 70, 65];
 
 // jQuery y moment se cargan como scripts globales (angular.json); el selector de fechas es el plugin daterangepicker.
@@ -46,6 +46,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
 
   // Periodo de las tarjetas y gráficas que dependen de él (por defecto HOY).
   sucursal: any = sucursalInicial();
+  private _alCambiarSucursal = alCambiarSucursal((s) => this.cambioSucusal(s));
   fechaInicial: string = moment().format('YYYY-MM-DD');
   fechaFinal: string = moment().format('YYYY-MM-DD');
   etiquetaPeriodo: string = 'Hoy';
@@ -53,13 +54,11 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private apiService: ApiServiceService,
-    private authService: AuthService,
     private zone: NgZone
   ) {}
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.obtenerSucursales();
       this.getInitialData(this.sucursal);
     }, 500);
   }
@@ -119,22 +118,15 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     // El periodo alimenta tarjetas y gráficas: se recarga todo el dashboard.
     this.getInitialData(this.sucursal);
   }
-  //Obtener sucursales
-  sucursales: Licencia[] = [];
-  obtenerSucursales() {
-    //Verificamos si tenemos las sucursales dentro del authService
-    let sucursales = this.authService.getLicencias();
-    if (sucursales != null || sucursales != undefined) {
-      this.sucursales = sucursales;
-    } else {
-      //Si no los tenemos en el authService, los obtenemos del localStorage.
-      this.sucursales = this.authService.setLicencias();
-    }
+  // El backend entrega horas.minutos (519.58 = 519 h 58 min), no horas decimales.
+  tiempoAbierto(valor: any): string {
+    const [h, m] = Number(valor).toFixed(2).split('.').map(Number);
+    return (h > 0 ? h + ' h ' : '') + m + ' min abierta';
   }
-  cambioSucusal(event: any) {
 
-    let sucursal = event.target.value;
-    this.getInitialData(sucursal)
+  cambioSucusal(valor: any) {
+    this.sucursal = Number(valor);
+    this.getInitialData(this.sucursal);
   }
 
   getInitialData(sucursal:any) {
