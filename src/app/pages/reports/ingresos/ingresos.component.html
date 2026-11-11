@@ -22,6 +22,22 @@
 
 
       <div class="form-floating buscador-ticket">
+        <input type="date" class="form-control box-shadow-rojo borde-rojo"
+          [(ngModel)]="fechaInicial"
+          (change)="validarFechaInicial($event.target)"
+        >
+        <label for="floatingSelect">Fecha Inicial:</label>
+      </div>
+
+      <div class="form-floating buscador-ticket">
+        <input type="date" class="form-control box-shadow-rojo borde-rojo"
+          [(ngModel)]="fechaFinal"
+          (change)="validarFechaFinal($event.target)"
+        >
+        <label for="floatingSelect">Fecha Final:</label>
+      </div>
+
+      <div class="form-floating buscador-ticket">
         <select (change)="cambioTipoMovimiento($event)"   class="form-select box-shadow-rojo borde-rojo" id="floatingSelect2" aria-label="Floating label select example">
           <option value="null" [selected]="!tipoMovimiento">TODOS</option>
           @for (item of tipoTrataniento; track $index) {
@@ -91,6 +107,12 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Sesiones </th>
       <td mat-cell *matCellDef="let element"> {{element.Sesiones | number:'1.0-0'}} </td>
       <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('Sesiones') | number:'1.0-0' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Tomadas">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tomadas </th>
+      <td mat-cell *matCellDef="let element"> {{element.Tomadas | number:'1.0-0'}} </td>
+      <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('Tomadas') | number:'1.0-0' }} </td>
     </ng-container>
 
   

@@ -51,10 +51,12 @@ export class ApiServiceService  {
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
 
-  //Tratamientos Realizados (completaron todas sus sesiones); sin rango de fechas
-  getReporteIngresos($sucursal: number = sucursalInicial(), tratamiento:any=null){
+  //Tratamientos Realizados (completaron todas sus sesiones); el rango filtra la fecha de término
+  getReporteIngresos($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = sucursalInicial(), tratamiento:any=null){
     let url = 'rtickets/ingresos'
     let data = {
+      'fecha_inicial': $fechaInicial,
+      'fecha_final': $fechaFinal,
       'sucursal': $sucursal,
       'tratamiento': tratamiento,
     }

@@ -34,6 +34,7 @@ export class IngresosComponent {
     'Cliente',
     'Tratamiento',
     'Sesiones',
+    'Tomadas',
   ];
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
@@ -62,7 +63,14 @@ export class IngresosComponent {
 
     //! Obtener los tipos de suscripciones
     this.getTipoTratamiento();
-    this.traerDatosFiltradosAPI(this.tratamientoFiltro(), false);
+    //Por defecto: el día actual (fecha local, no UTC)
+    const hoy = new Date();
+    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dd = String(hoy.getDate()).padStart(2, '0');
+    this.fechaInicial = `${hoy.getFullYear()}-${mm}-${dd}`;
+    this.fechaFinal = this.fechaInicial;
+
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tratamientoFiltro(), false);
 
   }
 
@@ -136,8 +144,47 @@ getTipoTratamiento(){
   }
 
   //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
+  //Variables para fecha inicial y fecha final
+  fechaInicial: string = '';
+  fechaFinal: string = '';
+  validarFechaInicial(event: any) {
+    this.fechaInicial = event.value;
+    if (this.fechaInicial > this.fechaFinal) {
+      this.toast.warning('La fecha FINAL no puede ser menor.', 'Advertencia', {
+        positionClass: 'toast-bottom-center',
+        timeOut: 5000,
+      });
+    }
+  }
+
+  validarFechaFinal(event: any) {
+    this.fechaFinal = event.value;
+    if (!this.fechaInicial) {
+      this.toast.error('La fecha inicial no puede estar vacía.', 'Error', {
+        positionClass: 'toast-top-center',
+        timeOut: 5000,
+      });
+      return;
+    }
+    if (this.fechaFinal < this.fechaInicial) {
+      this.fechaFinal = this.fechaInicial;
+      this.toast.error('La fecha FINAL no puede ser menor.', 'Error', {
+        positionClass: 'toast-bottom-center',
+        timeOut: 5000,
+      });
+    }
+  }
+
+  //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
   aplicarFiltros() {
-    this.traerDatosFiltradosAPI(this.tratamientoFiltro());
+    if (!this.fechaInicial || !this.fechaFinal || this.fechaFinal < this.fechaInicial) {
+      this.toast.error('Revisa el rango de fechas.', 'Error', {
+        positionClass: 'toast-bottom-center',
+        timeOut: 5000,
+      });
+      return;
+    }
+    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tratamientoFiltro());
   }
 
   //"TODOS" (0 / 'null') se envía como null para que el backend no filtre
@@ -146,13 +193,13 @@ getTipoTratamiento(){
   }
 
   private consulta?: Subscription;
-  traerDatosFiltradosAPI(tmovimiento: any = null, avisar: boolean = true) {
+  traerDatosFiltradosAPI(fechaInicial: string, fechaFinal: string, tmovimiento: any = null, avisar: boolean = true) {
 
         //! 999 es igual a TODOS, para que no entre nignun filtro.
 
     this.consulta?.unsubscribe();
     this.consulta = this.apiService
-      .getReporteIngresos(this.sucursal, tmovimiento)
+      .getReporteIngresos(fechaInicial, fechaFinal, this.sucursal, tmovimiento)
       .subscribe((data: any) => {
         this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
         this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
