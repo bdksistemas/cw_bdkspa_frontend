@@ -29,12 +29,11 @@ export class IngresosComponent {
 
   displayedColumns: any[] = [
 
+    'Ticket',
     'Fecha',
     'Cliente',
     'Tratamiento',
     'Sesiones',
-    'Sala',
-    'Empleado',
   ];
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
@@ -63,18 +62,7 @@ export class IngresosComponent {
 
     //! Obtener los tipos de suscripciones
     this.getTipoTratamiento();
-
-    this.getCajeros();
-
-    //Asignamos la fecha inicial y final al día actual (fecha local, no UTC)
-    const hoy = new Date();
-    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-    const dd = String(hoy.getDate()).padStart(2, '0');
-    this.fechaInicial = `${hoy.getFullYear()}-${mm}-${dd}`;
-    this.fechaFinal = this.fechaInicial;
-
-    //Al entrar solo cargamos lo del día actual
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tratamientoFiltro(), this.empleadoFiltro(), false);
+    this.traerDatosFiltradosAPI(this.tratamientoFiltro(), false);
 
   }
 
@@ -147,71 +135,24 @@ getTipoTratamiento(){
     return !isNaN(parseFloat(value)) && isFinite(value);
   }
 
-  //Variables para fecha inicial y fecha final
-  fechaInicial: string = '';
-  fechaFinal: string = '';
-  validarFechaInicial(event: any) {
-    this.fechaInicial = event.value;
-
-    //Si la fecha inicial es mayor a la fecha final, mostramos un mensaje de error
-    if (this.fechaInicial > this.fechaFinal) {
-      this.toast.warning('La fecha FINAL no puede ser menor.', 'Advertencia', {
-        positionClass: 'toast-bottom-center',
-        timeOut: 5000,
-      });
-    }
-  }
-
-  validarFechaFinal(event: any) {
-    this.fechaFinal = event.value;
-
-    //Si la fecha inicial esta vacia, mostramos un mensaje de error
-    if (this.fechaInicial == null || this.fechaInicial == undefined) {
-      this.toast.error('La fecha inicial no puede estar vacía.', 'Error', {
-        positionClass: 'toast-top-center',
-        timeOut: 5000,
-      });
-      return;
-    }
-
-    //Evaluamos la fecha final, si es menor a la fecha inicial, mostramos un mensaje de error
-    if (this.fechaFinal < this.fechaInicial) {
-      this.fechaFinal = this.fechaInicial;
-      this.toast.error('La fecha FINAL no puede ser menor.', 'Error', {
-        positionClass: 'toast-bottom-center',
-        timeOut: 5000,
-      });
-    }
-  }
-
   //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
   aplicarFiltros() {
-    if (!this.fechaInicial || !this.fechaFinal || this.fechaFinal < this.fechaInicial) {
-      this.toast.error('Revisa el rango de fechas.', 'Error', {
-        positionClass: 'toast-bottom-center',
-        timeOut: 5000,
-      });
-      return;
-    }
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tratamientoFiltro(), this.empleadoFiltro());
+    this.traerDatosFiltradosAPI(this.tratamientoFiltro());
   }
 
   //"TODOS" (0 / 'null') se envía como null para que el backend no filtre
   private tratamientoFiltro(): any {
     return (!this.tipoMovimiento || this.tipoMovimiento == 'null') ? null : this.tipoMovimiento;
   }
-  private empleadoFiltro(): any {
-    return this.empleadoSeleccionado == 0 ? null : this.empleadoSeleccionado;
-  }
 
   private consulta?: Subscription;
-  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string , tmovimiento: any = null, empleado: any = null, avisar: boolean = true) {
+  traerDatosFiltradosAPI(tmovimiento: any = null, avisar: boolean = true) {
 
         //! 999 es igual a TODOS, para que no entre nignun filtro.
 
     this.consulta?.unsubscribe();
     this.consulta = this.apiService
-      .getReporteIngresos(fecjaInicial, fechaFinal, this.sucursal, tmovimiento, empleado)
+      .getReporteIngresos(this.sucursal, tmovimiento)
       .subscribe((data: any) => {
         this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
         this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
@@ -241,9 +182,7 @@ getTipoTratamiento(){
       this.sucursal = Number(valor);
       //Tratamientos y empleados son por sucursal: reiniciamos y recargamos catálogos
       this.tipoMovimiento = 0;
-      this.empleadoSeleccionado = 0;
       this.getTipoTratamiento();
-      this.getCajeros();
     }
 
 
@@ -256,18 +195,5 @@ getTipoTratamiento(){
     cambioTipoMovimiento(event: any) {
       this.tipoMovimiento = event.target.value;
     }
-    empleadoSeleccionado:any = 0;
-    cambioEmpleado(event: any) {
-      this.empleadoSeleccionado = event.target.value;
-    }
-
-    cajeros: any[] = [];
-  cajero: number = 0;
-  getCajeros(){
-    this.apiService.getCajeros(this.sucursal).subscribe((data: any) => {
-      this.cajeros = data.data;
-    });
-
-  }
 
 }

@@ -51,15 +51,12 @@ export class ApiServiceService  {
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
 
-  getReporteIngresos($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = sucursalInicial(), tratamiento:any=null, empleado:any=null){
+  //Tratamientos Realizados (completaron todas sus sesiones); sin rango de fechas
+  getReporteIngresos($sucursal: number = sucursalInicial(), tratamiento:any=null){
     let url = 'rtickets/ingresos'
     let data = {
-      'fecha_inicial': $fechaInicial,
-      'fecha_final': $fechaFinal,
       'sucursal': $sucursal,
       'tratamiento': tratamiento,
-      'empleado': empleado
-
     }
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
@@ -124,18 +121,12 @@ export class ApiServiceService  {
     }
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
-  getCobroMembresias($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = sucursalInicial(), tmovimiento: any = null, tsuscripcion: any = null){
-
-    //! 999 es igual a TODOS, para que no entre nignun filtro.
-
+  //Tratamientos Activos (con sesiones por tomar); sin rango de fechas
+  getCobroMembresias($sucursal: number = sucursalInicial(), tmovimiento: any = null){
     let url = 'rtickets/cobro-membresias'
     let data = {
-      'fecha_inicial': $fechaInicial,
-      'fecha_final': $fechaFinal,
       'sucursal': $sucursal,
       'tmovimiento': tmovimiento,
-      'tsuscripcion': tsuscripcion,
-
     }
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }

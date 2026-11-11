@@ -64,14 +64,7 @@ export class CobroMembresiasComponent {
     //! Obtener los tipos de suscripciones
     this.getTipoTratamiento();
 
-    //Por defecto: del 1° del mes actual al día de hoy (fecha local, no UTC)
-    const hoy = new Date();
-    const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-    const dd = String(hoy.getDate()).padStart(2, '0');
-    this.fechaInicial = `${hoy.getFullYear()}-${mm}-01`;
-    this.fechaFinal = `${hoy.getFullYear()}-${mm}-${dd}`;
-
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tipoMovimiento, false);
+    this.traerDatosFiltradosAPI(this.tipoMovimiento, false);
   }
 
 
@@ -143,62 +136,18 @@ getTipoTratamiento(){
     return !isNaN(parseFloat(value)) && isFinite(value);
   }
 
-  //Variables para fecha inicial y fecha final
-  fechaInicial: string = '';
-  fechaFinal: string = '';
-  validarFechaInicial(event: any) {
-    this.fechaInicial = event.value;
-
-    //Si la fecha inicial es mayor a la fecha final, mostramos un mensaje de error
-    if (this.fechaInicial > this.fechaFinal) {
-      this.toast.warning('La fecha FINAL no puede ser menor.', 'Advertencia', {
-        positionClass: 'toast-bottom-center',
-        timeOut: 5000,
-      });
-    }
-  }
-
-  validarFechaFinal(event: any) {
-    this.fechaFinal = event.value;
-
-    //Si la fecha inicial esta vacia, mostramos un mensaje de error
-    if (this.fechaInicial == null || this.fechaInicial == undefined) {
-      this.toast.error('La fecha inicial no puede estar vacía.', 'Error', {
-        positionClass: 'toast-top-center',
-        timeOut: 5000,
-      });
-      return;
-    }
-
-    //Evaluamos la fecha final, si es menor a la fecha inicial, mostramos un mensaje de error
-    if (this.fechaFinal < this.fechaInicial) {
-      this.fechaFinal = this.fechaInicial;
-      this.toast.error('La fecha FINAL no puede ser menor.', 'Error', {
-        positionClass: 'toast-bottom-center',
-        timeOut: 5000,
-      });
-    }
-  }
-
   //Los filtros solo guardan su valor; la consulta se hace al presionar "Aplicar filtros"
   aplicarFiltros() {
-    if (!this.fechaInicial || !this.fechaFinal || this.fechaFinal < this.fechaInicial) {
-      this.toast.error('Revisa el rango de fechas.', 'Error', {
-        positionClass: 'toast-bottom-center',
-        timeOut: 5000,
-      });
-      return;
-    }
-    this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.tipoMovimiento);
+    this.traerDatosFiltradosAPI(this.tipoMovimiento);
   }
 
   private consulta?: Subscription;
-  //tmovimiento = código del tratamiento (0/null = todos); el servicio aún recibe tsuscripcion, siempre null
-  traerDatosFiltradosAPI(fecjaInicial: string, fechaFinal: string , tmovimiento: any = null, avisar: boolean = true) {
+  //tmovimiento = código del tratamiento (0/null = todos)
+  traerDatosFiltradosAPI(tmovimiento: any = null, avisar: boolean = true) {
 
     this.consulta?.unsubscribe();
     this.consulta = this.apiService
-      .getCobroMembresias(fecjaInicial, fechaFinal, this.sucursal, tmovimiento, null)
+      .getCobroMembresias(this.sucursal, tmovimiento)
       .subscribe((data: any) => {
         this.MatPaginatorIntl.itemsPerPageLabel = 'Registros por página';
         this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
