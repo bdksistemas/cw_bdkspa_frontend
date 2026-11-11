@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { alCambiarSucursal } from '../../../services/sucursal.service';
 import { Subscription } from 'rxjs';
+import { sumarColumna } from '../../../shared/sumar-columna';
 @Component({
   selector: 'app-ventas-credito',
   templateUrl: './ventas-credito.component.html',
@@ -63,20 +64,8 @@ export class VentasCreditoComponent {
     this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, false);
   }
 
-  getTotalCost(columna: any) {
-    //Si existen elementos filtrados:
-    if (this.dataSource.filteredData.length > 0) {
-      let sumaTotal = 0;
-      this.dataSource.filteredData.forEach((row) => {
-        sumaTotal += row[columna];
-      });
-      return sumaTotal;
-    }
-    let sumaTotal = 0;
-    this.dataSource.data.forEach((row) => {
-      sumaTotal += row[columna];
-    });
-    return sumaTotal;
+  getTotalCost(columna: string) {
+    return sumarColumna(this.dataSource, columna);
   }
 
   applyFilter(filterValue: any) {
@@ -208,71 +197,5 @@ export class VentasCreditoComponent {
       this.sucursal = Number(valor);
     }
 
-  // Generar datos de prueba para cada columna
-  testData: any[] = [];
-  dataPrueba() {
-    for (let i = 1; i <= 100; i++) {
-      const rowData: any = {};
-      this.displayedColumns.forEach((column) => {
-        // displayedColumns: any[] = [
-        //   'Ticket',
-        //   'Fecha',
-        //   'NombreSocio',
-        //   'Importe',
-        //   'Descuento',
-        //   'ISR',
-        //   'IEPS',
-        //   'IVA',
-        //   'TOTAL',
-        //   'Abonado',
-        //   'Saldo',
-        //   'FechaUltimoPago'
-        // ];
 
-        switch (column) {
-          case 'Ticket':
-            rowData[column] = `Ticket ${i}`;
-            break;
-          case 'Fecha':
-            rowData[column] = `Fecha ${i}`;
-            break;
-          case 'NombreSocio':
-            rowData[column] = `Nombre Socio ${i}`;
-            break;
-          case 'Importe':
-            rowData[column] = `Importe ${i}`;
-            break;
-          case 'Descuento':
-            rowData[column] = `Descuento ${i}`;
-            break;
-          case 'ISR':
-            rowData[column] = `ISR ${i}`;
-            break;
-          case 'IEPS':
-            rowData[column] = `IEPS ${i}`;
-            break;
-          case 'IVA':
-            rowData[column] = `IVA ${i}`;
-            break;
-          case 'TOTAL':
-            rowData[column] = `TOTAL ${i}`;
-            break;
-          case 'Abonado':
-            rowData[column] = `Abonado ${i}`;
-            break;
-          case 'Saldo':
-            rowData[column] = `Saldo ${i}`;
-            break;
-          case 'FechaUltimoPago':
-            rowData[column] = `Fecha Ultimo Pago ${i}`;
-            break;
-
-          default:
-            rowData[column] = '';
-            break;
-        }
-      });
-      this.testData.push(rowData);
-    }
-  }
 }

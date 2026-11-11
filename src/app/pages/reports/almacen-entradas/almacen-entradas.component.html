@@ -40,9 +40,9 @@
 
       <div class="form-floating buscador-ticket">
         <select (change)="cambioProvedor($event)"   class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
-          <option value="0">SELECCIONA UN PROVEDOR</option>
+          <option value="0" [selected]="!provedor">SELECCIONA UN PROVEDOR</option>
           @for (item of provedores; track $index) {
-            <option value="{{item.proveedor}}">{{item.nomproveedor}} </option>
+            <option value="{{item.proveedor}}" [selected]="provedor == item.proveedor">{{item.nomproveedor}} </option>
           }
 
         </select>

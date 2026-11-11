@@ -14,6 +14,7 @@ import { alCambiarSucursal } from '../../../services/sucursal.service';
 import { Subscription } from 'rxjs';
 
 
+import { sumarColumna } from '../../../shared/sumar-columna';
 @Component({
   selector: 'app-cobro-membresias',
   templateUrl: './tratamientos-activos.component.html',
@@ -81,20 +82,8 @@ getTipoTratamiento(){
   });
 }
 
-  getTotalCost(columna: any) {
-    //Si existen elementos filtrados:
-    if (this.dataSource.filteredData.length > 0) {
-      let sumaTotal = 0;
-      this.dataSource.filteredData.forEach((row) => {
-        sumaTotal += row[columna];
-      });
-      return sumaTotal;
-    }
-    let sumaTotal = 0;
-    this.dataSource.data.forEach((row) => {
-      sumaTotal += row[columna];
-    });
-    return sumaTotal;
+  getTotalCost(columna: string) {
+    return sumarColumna(this.dataSource, columna);
   }
 
   ngAfterViewInit() {

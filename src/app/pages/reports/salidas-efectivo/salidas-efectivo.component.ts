@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { alCambiarSucursal } from '../../../services/sucursal.service';
 
+import { sumarColumna } from '../../../shared/sumar-columna';
 @Component({
   selector: 'app-salidas-efectivo',
   templateUrl: './salidas-efectivo.component.html',
@@ -77,20 +78,8 @@ export class SalidasEfectivoComponent {
     this.traerDatosFiltradosAPI(this.fechaInicial, this.fechaFinal, this.cajero, false);
   }
 
-  getTotalCost(columna: any) {
-    //Si existen elementos filtrados:
-    if (this.dataSource.filteredData.length > 0) {
-      let sumaTotal = 0;
-      this.dataSource.filteredData.forEach((row) => {
-        sumaTotal += row[columna];
-      });
-      return sumaTotal;
-    }
-    let sumaTotal = 0;
-    this.dataSource.data.forEach((row) => {
-      sumaTotal += row[columna];
-    });
-    return sumaTotal;
+  getTotalCost(columna: string) {
+    return sumarColumna(this.dataSource, columna);
   }
 
   ngAfterViewInit() {
@@ -240,37 +229,5 @@ export class SalidasEfectivoComponent {
       this.cajero= event.target.value;
     }
 
-  // Generar datos de prueba para cada columna
-  testData: any[] = [];
-  dataPrueba() {
-    for (let i = 1; i <= 100; i++) {
-      const rowData: any = {};
-      this.displayedColumns.forEach((column) => {
-        switch (column) {
-          // case 'FechaHora':
-          //   rowData[column] = new Date().toLocaleString();
-          //   break;
-          case 'IDSalida':
-            rowData[column] = i;
-            break;
-          case 'FechaHora':
-            rowData[column] = new Date().toLocaleString();
-            break;
-          case 'Cajero':
-            rowData[column] = 'John Doe';
-            break;
-          case 'Motivo':
-            rowData[column] = 'Sample Reason';
-            break;
-          case 'ImporteTotal':
-            rowData[column] = 100.00;
-            break;
-          default:
-            rowData[column] = '';
-            break;
-        }
-      });
-      this.testData.push(rowData);
-    }
-  }
+
 }

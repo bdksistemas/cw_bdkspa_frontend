@@ -44,9 +44,9 @@
 
       <div class="form-floating buscador-ticket">
         <select (change)="cambioCategoria($event)" class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
-          <option value="0">TODAS LAS CATEGORÍAS</option>
+          <option value="0" [selected]="!categoriaSeleccionada">TODAS LAS CATEGORÍAS</option>
           @for (item of categorias; track $index) {
-            <option value="{{item.categoria}}">{{item.nomcategoria}} </option>
+            <option value="{{item.categoria}}" [selected]="categoriaSeleccionada == item.categoria">{{item.nomcategoria}} </option>
           }
         </select>
         <label for="floatingSelect">Selecciona Categoría</label>
@@ -104,7 +104,7 @@
       <ng-container matColumnDef="Saldo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Saldo </th>
         <td mat-cell *matCellDef="let row"> {{row.Saldo | currency}} </td>
-        <td mat-footer-cell *matFooterCellDef>  </td>
+        <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('Saldo') | currency }} </td>
       </ng-container>
 
       <ng-container matColumnDef="UltimoMovimiento">

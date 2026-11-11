@@ -39,9 +39,9 @@
     </div>
     <div class="form-floating buscador-ticket">
       <select (change)="cambioProvedor($event)"   class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
-        <option value="0">SELECCIONA UN PROVEDOR</option>
+        <option value="0" [selected]="!provedor">SELECCIONA UN PROVEDOR</option>
         @for (item of provedores; track $index) {
-          <option value="{{item.proveedor}}">{{item.nomproveedor}} </option>
+          <option value="{{item.proveedor}}" [selected]="provedor == item.proveedor">{{item.nomproveedor}} </option>
         }
 
       </select>
@@ -52,9 +52,9 @@
 
     <div class="form-floating buscador-ticket">
       <select (change)="cambioEstatus($event)"   class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
-        <option value="0">SELECCIONA UN ESTATUS</option>
+        <option value="0" [selected]="!estatusSeleccionado">SELECCIONA UN ESTATUS</option>
         @for (item of estatus; track $index) {
-          <option value="{{item.estatus}}">{{item.nomestatus}} </option>
+          <option value="{{item.estatus}}" [selected]="estatusSeleccionado == item.estatus">{{item.nomestatus}} </option>
         }
       </select>
       <label for="floatingSelect">ESTATUS</label>
@@ -100,8 +100,8 @@
 
       <ng-container matColumnDef="ImporteTotal">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Importe Total</th>
-        <td mat-cell *matCellDef="let row"> {{ row.ImporteTotal }} </td>
-        <td mat-footer-cell *matFooterCellDef> </td>
+        <td mat-cell *matCellDef="let row"> {{ row.ImporteTotal | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('ImporteTotal') | currency }} </td>
       </ng-container>
 
       <!-- <ng-container matColumnDef="Pedido">

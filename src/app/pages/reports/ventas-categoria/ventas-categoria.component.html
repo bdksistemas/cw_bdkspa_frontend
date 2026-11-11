@@ -58,7 +58,7 @@
       <ng-container matColumnDef="CantidadProductos">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad Productos Vendidos </th>
         <td mat-cell *matCellDef="let row"> {{ row.CantidadProductos }} </td>
-        <td mat-footer-cell *matFooterCellDef>  </td>
+        <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('CantidadProductos') | number }} </td>
       </ng-container>
 
       <ng-container matColumnDef="ImporteTotal">
@@ -70,7 +70,7 @@
       <ng-container matColumnDef="Ganancia">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Ganancia </th>
         <td mat-cell *matCellDef="let row"> {{ row.Ganancia  | currency }} </td>
-        <td mat-footer-cell *matFooterCellDef>  </td>
+        <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('Ganancia') | currency }} </td>
       </ng-container>
 
 

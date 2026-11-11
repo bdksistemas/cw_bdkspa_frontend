@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { alCambiarSucursal } from '../../../services/sucursal.service';
 
+import { sumarColumna } from '../../../shared/sumar-columna';
 export interface TicktData {
   ticket: number;
   fechaHora: string;
@@ -68,7 +69,7 @@ export class AlmacenExistenciasComponent {
     this.MatPaginatorIntl.nextPageLabel = 'Siguiente';
     this.MatPaginatorIntl.previousPageLabel = 'Anterior';
     // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(this.testData);
+    this.dataSource = new MatTableDataSource<any>([]);
   }
 
   ngOnInit() {
@@ -89,20 +90,8 @@ export class AlmacenExistenciasComponent {
     this.categoria = event.target.value;
   }
 
-  getTotalCost(columna: any) {
-    //Si existen elementos filtrados:
-    if (this.dataSource.filteredData.length > 0) {
-      let sumaTotal = 0;
-      this.dataSource.filteredData.forEach((row) => {
-        sumaTotal += row[columna];
-      });
-      return sumaTotal;
-    }
-    let sumaTotal = 0;
-    this.dataSource.data.forEach((row) => {
-      sumaTotal += row[columna];
-    });
-    return sumaTotal;
+  getTotalCost(columna: string) {
+    return sumarColumna(this.dataSource, columna);
   }
 
   ngAfterViewInit() {
@@ -207,53 +196,5 @@ export class AlmacenExistenciasComponent {
     this.obtenerCategorias();
   }
 
-  // Generar datos de prueba para cada columna
-  testData: any[] = [];
-  dataPrueba() {
-    for (let i = 1; i <= 100; i++) {
-      const rowData: any = {};
-      this.displayedColumns.forEach((column) => {
-        switch (column) {
-          // case 'FechaHora':
-          //   rowData[column] = new Date().toLocaleString();
-          //   break;
-          case 'NombreCategoria':
-            rowData[column] = `Categoria ${i}`;
-            break;
-          case 'NombreProducto':
-            rowData[column] = `Producto ${i}`;
-            break;
-          case 'TipoProducto':
-            rowData[column] = `Tipo Producto ${i}`;
-            break;
-          case 'Seccion':
-            rowData[column] = `Seccion ${i}`;
-            break;
-          case 'Existencia':
-            rowData[column] = i;
-            break;
-          case 'Costo':
-            rowData[column] = i;
-            break;
-          case 'Venta':
-            rowData[column] = i;
-            break;
-          case 'Importe':
-            rowData[column] = i;
-            break;
-          case 'MinimoRequerido':
-            rowData[column] = `MinimoRequerido ${i}`;
-            break;
-          case 'MaximoPermitido':
-            rowData[column] = `MaximoPermitido ${i}`;
-            break;
 
-          default:
-            rowData[column] = '';
-            break;
-        }
-      });
-      this.testData.push(rowData);
-    }
-  }
 }

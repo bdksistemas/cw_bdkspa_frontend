@@ -41,9 +41,9 @@
      <!-- PROVEEDORES -->
       <div class="form-floating buscador-ticket">
         <select (change)="cambioProvedor($event)" class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
-          <option value="0">TODOS</option>
+          <option value="0" [selected]="!provedor">TODOS</option>
           @for (item of provedores; track $index) {
-            <option value="{{item.proveedor}}">{{item.nomproveedor}} </option>
+            <option value="{{item.proveedor}}" [selected]="provedor == item.proveedor">{{item.nomproveedor}} </option>
           }
         </select>
         <label for="floatingSelect">Selecciona Provedor</label>
@@ -94,7 +94,7 @@
       <ng-container matColumnDef="ImporteTotal">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> ImporteTotal </th>
         <td mat-cell *matCellDef="let element"> {{element.ImporteTotal | currency}} </td>
-        <td mat-footer-cell *matFooterCellDef> </td>
+        <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('ImporteTotal') | currency }} </td>
       </ng-container>
 
       <ng-container matColumnDef="Provedor">

@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService, sucursalInicial } from '../../auth/auth.service';
 import { alCambiarSucursal } from '../../services/sucursal.service';
 
+import { sumarColumna } from '../../shared/sumar-columna';
 export interface TicktData {
   ticket: number;
   fechaHora: string;
@@ -92,20 +93,8 @@ export class TablaDatosComponent {
 
 
   /** Gets the total cost of all transactions. */
-  getTotalCost(columna: any) {
-    //Si existen elementos filtrados:
-    if (this.dataSource.filteredData.length > 0) {
-      let sumaTotal = 0;
-      this.dataSource.filteredData.forEach((row) => {
-        sumaTotal += row[columna];
-      });
-      return sumaTotal;
-    }
-    let sumaTotal = 0;
-    this.dataSource.data.forEach((row) => {
-      sumaTotal += row[columna];
-    });
-    return sumaTotal;
+  getTotalCost(columna: string) {
+    return sumarColumna(this.dataSource, columna);
   }
 
   categorias: any[] = [];
@@ -265,59 +254,6 @@ export class TablaDatosComponent {
     }
 
 
-  // Generar datos de prueba para cada columna
-  testData: any[] = [];
-  dataPrueba() {
-    for (let i = 1; i <= 100; i++) {
-      const rowData: any = {};
-      this.displayedColumns.forEach((column) => {
-        switch (column) {
-          case 'Ticket':
-            rowData[column] = i;
-            break;
-          case 'FechaHora':
-            rowData[column] = new Date().toLocaleString();
-            break;
-          case 'NombreSocio':
-            rowData[column] = 'Nombre Socio ' + i;
-            break;
-          case 'Importe':
-            rowData[column] = Math.floor(Math.random() * 1000);
-            break;
-          case 'Descuento':
-            rowData[column] = Math.floor(Math.random() * 100);
-            break;
-          case 'ISR':
-            rowData[column] = Math.floor(Math.random() * 100);
-            break;
-          case 'IEPS':
-            rowData[column] = Math.floor(Math.random() * 100);
-            break;
-          case 'IVA':
-            rowData[column] = Math.floor(Math.random() * 100);
-            break;
-          case 'Total':
-            rowData[column] = Math.floor(Math.random() * 1000);
-            break;
-          case 'Abonado':
-            rowData[column] = Math.floor(Math.random() * 1000);
-            break;
-          case 'Saldo':
-            rowData[column] = Math.floor(Math.random() * 1000);
-            break;
-          case 'UltimoPago':
-            rowData[column] = Math.floor(Math.random() * 1000);
-            break;
-          case 'NombreCajero':
-            rowData[column] = 'Nombre Cajero ' + i;
-            break;
-          default:
-            rowData[column] = '';
-            break;
-        }
-      });
-      this.testData.push(rowData);
-    }
-  }
+
 
 }

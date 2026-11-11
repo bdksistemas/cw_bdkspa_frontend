@@ -11,6 +11,7 @@ import { ApiServiceService } from '../../../services/api-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { alCambiarSucursal } from '../../../services/sucursal.service';
+import { sumarColumna } from '../../../shared/sumar-columna';
 @Component({
   selector: 'app-lista-clientes',
   templateUrl: './lista-clientes.component.html',
@@ -60,21 +61,8 @@ export class ListaClientesComponent {
   }
 
 
-  getTotalCost(columna: any) {
-    //Si existen elementos filtrados:
-    if (this.dataSource.filteredData.length > 0) {
-      let sumaTotal = 0;
-      this.dataSource.filteredData.forEach((row) => {
-        sumaTotal += row[columna];
-      });
-      return sumaTotal;
-    }
-
-    let sumaTotal = 0;
-    this.dataSource.data.forEach((row) => {
-      sumaTotal += row[columna];
-    });
-    return sumaTotal;
+  getTotalCost(columna: string) {
+    return sumarColumna(this.dataSource, columna);
   }
 
   applyFilter(filterValue: any) {

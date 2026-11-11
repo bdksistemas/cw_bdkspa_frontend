@@ -441,6 +441,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   }
 
   graficaTop10Productos() {
+    const nombresCompletos: string[] = [];
     let labels: any[] = [];
     let data: any[] = [];
 
@@ -453,7 +454,9 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       this.top10Productsdata.forEach((producto: any) => {
 
 
-        labels.push(producto.nomproducto + ' ' + `(${producto.total_producto_vendido})`);
+        nombresCompletos.push(producto.nomproducto);
+        const n = String(producto.nomproducto);
+        labels.push((n.length > 22 ? n.slice(0, 21) + '…' : n) + ` (${producto.total_producto_vendido})`);
         data.push(producto.total_producto_vendido);
       });
 
@@ -516,6 +519,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
         plugins: {
           tooltip: {
             callbacks: {
+              title: (items: any[]) => nombresCompletos[items[0].dataIndex] ?? items[0].label,
               label: function (context: any) {
                 return context.dataset.label + ': ' + context.formattedValue;
               },
@@ -681,7 +685,8 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       },
 
       options: {
-        responsive: false,
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             position: 'bottom', // Coloca la leyenda a la derecha

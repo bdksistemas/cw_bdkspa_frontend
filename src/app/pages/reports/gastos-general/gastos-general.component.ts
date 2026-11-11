@@ -13,6 +13,7 @@ import { AuthService, sucursalInicial } from '../../../auth/auth.service';
 import { alCambiarSucursal } from '../../../services/sucursal.service';
 import { Subscription } from 'rxjs';
 
+import { sumarColumna } from '../../../shared/sumar-columna';
 @Component({
   selector: 'app-gastos-general',
   templateUrl: './gastos-general.component.html',
@@ -97,20 +98,8 @@ export class GastosGeneralComponent {
       this.tipoTrataniento = data.data;
     });
   }
-  getTotalCost(columna: any) {
-    //Si existen elementos filtrados:
-    if (this.dataSource.filteredData.length > 0) {
-      let sumaTotal = 0;
-      this.dataSource.filteredData.forEach((row) => {
-        sumaTotal += row[columna];
-      });
-      return sumaTotal;
-    }
-    let sumaTotal = 0;
-    this.dataSource.data.forEach((row) => {
-      sumaTotal += row[columna];
-    });
-    return sumaTotal;
+  getTotalCost(columna: string) {
+    return sumarColumna(this.dataSource, columna);
   }
 
   ngAfterViewInit() {
@@ -290,40 +279,5 @@ export class GastosGeneralComponent {
     this.getProveedores();
   }
 
-  // Generar datos de prueba para cada columna
-  testData: any[] = [];
-  dataPrueba() {
-    for (let i = 1; i <= 100; i++) {
-      const rowData: any = {};
-      this.displayedColumns.forEach((column) => {
-        switch (column) {
-          // case 'FechaHora':
-          //   rowData[column] = new Date().toLocaleString();
-          //   break;
-          case 'TipoGasto':
-            rowData[column] = `TipoGasto  ${i}`;
-            break;
-          case 'FechaHora':
-            rowData[column] = new Date().toLocaleString();
-            break;
-          case 'Provedor':
-            rowData[column] = `Provedor ${i}`;
-            break;
-          case 'Responsable':
-            rowData[column] = `Responsable ${i}`;
-            break;
-          case 'Motivo':
-            rowData[column] = `Motivo ${i}`;
-            break;
-          case 'ImporteTotal':
-            rowData[column] = i;
-            break;
-          default:
-            rowData[column] = '';
-            break;
-        }
-      });
-      this.testData.push(rowData);
-    }
-  }
+
 }
