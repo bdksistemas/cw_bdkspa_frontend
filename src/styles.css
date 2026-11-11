@@ -126,11 +126,10 @@ app-titulo-pagina h5 {
 }
 .buscador-ticket { width: 300px; margin: 10px; }
 
-/* Barra de filtros: buscador y filtros arriba; botones (Aplicar, PDF, Excel) juntos en su propia fila */
+/* Barra de filtros: buscador, filtros y "Aplicar filtros" (a la altura de las fechas) arriba; PDF y Excel juntos en su propia fila */
 .demo-button-container { margin-bottom: 16px; }
 .demo-button-container::before { content: ''; order: 1; flex-basis: 100%; height: 0; } /* salto de fila */
-.demo-button-container > div:has(> button.rojo) { order: 2; }
-.demo-button-container > div:has(> button.verde) { order: 3; }
+.demo-button-container > div:has(> button.descarga) { order: 2; }
 .buscador-item { padding-top: 10px !important; }
 
 /* ---------- Inputs ---------- */
