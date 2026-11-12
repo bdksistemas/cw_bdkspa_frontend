@@ -22,24 +22,22 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   barChart: Chart | undefined;
   lineChart: Chart | undefined;
   top10Products: Chart | undefined;
-  asistenciasHoraChart: Chart | undefined;
-  metodosDePago: Chart | undefined | any;
   doughnutChart: Chart | undefined | any;
 
   tratamientoSala: Chart | undefined | any;
 
 
-  sociosPorClase: any;
-  sociosPorClaseoData: any;
+  serviciosPorEmpleado: any;
+  serviciosPorEmpleadoData: any;
 
   top10Productsdata:any;
   ventasCategoriaData:any;
-  asistenciasHoraData: any;
-  metodosDePagoData: any;
+  citasData: any;
+  cuentasAbiertasData: any;
   ventasCategoria: any;
 
-  sociosActivos: any;
-  inscripcionesDiarias: any;
+  tratamientosActivos: any;
+  serieVentas: any;
 
   datosIniciales: DdatosIniciales = {} as DdatosIniciales;
   tratamientosData: any;
@@ -141,15 +139,14 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       // console.log(res);
       this.datosIniciales = res.data.datosIniciales;
 
-      this.sociosActivos = res.data.sociosActivos;
-      this.graficaSociosActivos();
+      this.tratamientosActivos = res.data.tratamientosActivos;
+      this.graficaTratamientosActivos();
 
-      this.inscripcionesDiarias = res.data.inscripcionesDiarias;
+      this.serieVentas = res.data.serieVentas;
       this.agrupacionVentas = res.data.agrupacionVentas;
-      this.graficaInscripcionesAbiertas();
+      this.graficaSerieVentas();
 
-      this.asistenciasHoraData = res.data.asistenciasHoraDiaria;
-      // this.graficaAsistenciaPorHora();
+      this.citasData = res.data.citasPeriodo;
 
       this.top10Productsdata = res.data.topProductos;
       this.graficaTop10Productos();
@@ -158,15 +155,14 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       this.graficaVentasPorCategoria();
 
 
-      this.metodosDePagoData = res.data.formasDePago;
-      // this.graficaMetodosDePago();
+      this.cuentasAbiertasData = res.data.cuentasAbiertas;
 
 
       this.tratamientosData = res.data.tratamientosSalas;
       this.graficaTratamientos();
 
-      this.sociosPorClaseoData = res.data.sociosPorClase;
-      this.graficaSociosPorClase();
+      this.serviciosPorEmpleadoData = res.data.serviciosPorEmpleado;
+      this.graficaServiciosPorEmpleado();
 
     });
   }
@@ -240,19 +236,19 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       },
     });
   }
-  graficaSociosPorClase() {
+  graficaServiciosPorEmpleado() {
     let labels: any[] = [];
     let data: any[] = [];
 
     try {
-      this.sociosPorClaseoData.forEach((mesero: any) => {
-        labels.push(mesero.nombre.trim() + ' ' + `(${mesero.total_tratamientos})`);
-        data.push(mesero.total_tratamientos);
+      this.serviciosPorEmpleadoData.forEach((empleado: any) => {
+        labels.push(empleado.nombre.trim() + ' ' + `(${empleado.total_tratamientos})`);
+        data.push(empleado.total_tratamientos);
       });
-      if (this.sociosPorClase) {
-        this.sociosPorClase.destroy();
+      if (this.serviciosPorEmpleado) {
+        this.serviciosPorEmpleado.destroy();
       }
-      this.sociosPorClase = new Chart('sociosPorClase', {
+      this.serviciosPorEmpleado = new Chart('serviciosPorEmpleado', {
         type: 'bar',
         data: {
           labels: labels,
@@ -313,11 +309,11 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
         },
       });
     } catch (error) {
-      // console.log('Error al cargar la grafica de ventas por mesero');
+      // console.log('Error al cargar la grafica de servicios por empleado');
       // console.log(error);
 
       //Creamos una grafica con datos de prueba.
-      this.sociosPorClase = new Chart('sociosPorClase', {
+      this.serviciosPorEmpleado = new Chart('serviciosPorEmpleado', {
         type: 'bar',
         data: {
           labels: ['PRUEBA 1', 'PRUEBA 2', 'PRUEBA 3', 'PRUEBA 4', 'PRUEBA 5'],
@@ -530,13 +526,13 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  graficaInscripcionesAbiertas() {
+  graficaSerieVentas() {
     let labels: any[] = [];
     let data: any[] = [];
 
-    this.inscripcionesDiarias.forEach((inscripcion: any) => {
-      labels.push(inscripcion.fecha);
-      data.push(inscripcion.inscripciones);
+    this.serieVentas.forEach((punto: any) => {
+      labels.push(punto.fecha);
+      data.push(punto.ventas);
     });
 
     if(this.chart != undefined){
@@ -555,7 +551,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       backgroundColors.push(color);
     }
 
-    this.chart = new Chart('inscripcionesDiarias', {
+    this.chart = new Chart('serieVentas', {
       type: 'bar',
       data: {
         // labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -601,59 +597,11 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  graficaAsistenciaPorHora() {
-
-    // console.log('ESTO SON LAS VENTAS POR HORA '+ this.ventasPorHora);
+  graficaTratamientosActivos() {
+    // console.log('ESTO SON LAS MESAS OCUPADAS '+ this.tratamientosActivos);
     let labels: any[] = [];
     let data: any[] = [];
-
-    this.asistenciasHoraData.forEach((asistencia: any) => {
-      labels.push(asistencia.hora);
-      data.push(asistencia.total);
-    });
-
-    if (this.asistenciasHoraChart) {
-      this.asistenciasHoraChart.destroy();
-  }
-
-    this.asistenciasHoraChart = new Chart('asistenciasHoraChart', {
-      type: 'bar',
-      data: {
-        labels: labels,
-        //labels: Array.from({ length: 14 }, (_, i) => `${i + 1} AM`), // Etiquetas para las horas del día
-        datasets: [
-          {
-            label: 'Asistencias por hora:',
-            data: data, // Tus datos de ventas por hora
-            backgroundColor: 'rgba(0, 123, 255, 1)', // Color de las barras
-            borderColor: 'rgba(54, 162, 235, 1)', // Color del borde de las barras
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true, // Empezar el eje y en 0
-            ticks: {
-              callback: function (value) {
-                return value.toLocaleString('es-MX', {
-                  style: 'currency',
-                  currency: 'MXN',
-                });
-              },
-            },
-          },
-        },
-      },
-    });
-  }
-
-  graficaSociosActivos() {
-    // console.log('ESTO SON LAS MESAS OCUPADAS '+ this.sociosActivos);
-    let labels: any[] = [];
-    let data: any[] = [];
-    this.sociosActivos.forEach((element:any) => {
+    this.tratamientosActivos.forEach((element:any) => {
       labels.push(element.nomproducto + ' ' + `(${element.total})`);
       data.push(element.total);
     });
@@ -669,7 +617,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
         labels: labels,
         datasets: [
           {
-            label: '# de Mesas',
+            label: 'Tratamientos activos',
             data: data,
             backgroundColor: [
               'rgba(224, 22, 22, 1.00)',
@@ -708,81 +656,6 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     if (legendElement) {
       legendElement.classList.add('legend-container');
     }
-
-  }
-
-  graficaMetodosDePago() {
-    let labelsmetodosDePago: any = [];
-    let datametodosDePago: any = [];
-
-    if(this.metodosDePago){
-      this.metodosDePago.destroy();
-    }
-
-    this.metodosDePagoData.forEach((metodo: any) => {
-      labelsmetodosDePago.push(metodo.FormaDePago);
-      datametodosDePago.push(metodo.Importe);
-    });
-    //Calculamos el valor mas alto para mostrarlo en el titulo
-    let maxLabel =
-      labelsmetodosDePago[
-        datametodosDePago.indexOf(Math.max(...datametodosDePago))
-      ];
-
-
-    this.metodosDePago = new Chart('metodosDePago', {
-      type: 'doughnut',
-      data: {
-        labels: labelsmetodosDePago,
-        datasets: [
-          {
-            data: datametodosDePago,
-            //Creamos un array de colores para cada una de las barras, segun la cantidad de datos.
-            backgroundColor: [
-              'rgba(236, 110, 6, 0.7)',
-              'rgba(54, 162, 235, 0.7)',
-              'rgba(255, 206, 86, 0.7)',
-              'rgba(75, 192, 192, 0.7)',
-              'rgba(153, 102, 255, 0.7)',
-              'rgba(255, 99, 132, 0.7)',
-              'rgba(255, 99, 132, 0.7)',
-              'rgba(54, 162, 235, 0.7)',
-              'rgba(255, 206, 86, 0.7)',
-              'rgba(255, 99, 132, 0.7)',
-            ],
-            borderWidth: 1,
-            label: 'Metodos de pago',
-          },
-        ],
-      },
-      options: {
-        // scales: {
-        //   y: {
-        //     beginAtZero: true,
-        //     ticks: {
-        //       callback: function(value) {
-        //           return value.toLocaleString('es-MX', {style: 'currency', currency: 'MXN'});
-        //       }
-        //   }
-        //   }
-        // },
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'bottom',
-          },
-
-          title: {
-            display: true,
-            text: maxLabel,
-            position: 'bottom',
-          },
-        },
-      },
-    });
-
 
   }
 

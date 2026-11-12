@@ -33,7 +33,7 @@
       </div>
       <!-- /.info-box-content -->
     </div>
-    <div class="info-box info-box-inscripciones">
+    <div class="info-box info-box-tratamientos">
       <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
       <div class="info-box-content">
@@ -89,7 +89,7 @@
         </div>
       </div>
       <div class="card-body"  id="cardcuentasAbiertas" >
-        <canvas id="inscripcionesDiarias" class="canvas-chart" ></canvas>
+        <canvas id="serieVentas" class="canvas-chart" ></canvas>
       </div>
       <!-- /.card-body -->
     </div>
@@ -108,7 +108,7 @@
       </div>
       <div class="card-body"  id="CventasPorHora" style="display: block !important;" >
         <div class="cuentas-grid">
-          @for (item of asistenciasHoraData; track $index) {
+          @for (item of citasData; track $index) {
             <div class="cuenta-card">
               <div class="cuenta-cliente">{{ item.nomcliente }}</div>
               <div class="cita-tratamiento">{{ item.nomproducto }}</div>
@@ -122,7 +122,6 @@
             <p class="cuentas-vacio">No hay citas en el periodo.</p>
           }
         </div>
-        <!-- <canvas id="asistenciasHoraChart" class="canvas-chart" ></canvas> -->
       </div>
       <!-- /.card-body -->
     </div>
@@ -153,7 +152,7 @@
       </div>
       <div class="card-body"  id="CventasPorHora" style="display: block !important;" >
         <div class="cuentas-grid">
-          @for (item of metodosDePagoData; track $index) {
+          @for (item of cuentasAbiertasData; track $index) {
             <div class="cuenta-card">
               <div class="cuenta-cliente">{{ item.nomcliente }}</div>
               <div class="cuenta-importe">{{ item.total | currency }}</div>
@@ -166,11 +165,7 @@
             <p class="cuentas-vacio">No hay cuentas abiertas.</p>
           }
         </div>
-        <!-- <canvas id="asistenciasHoraChart" class="canvas-chart" ></canvas> -->
       </div>
-      <!-- <div class="card-body"  id="CardmetodosDePago" >
-        <canvas id="metodosDePago" class="canvas-chart" ></canvas>
-      </div> -->
       <!-- /.card-body -->
     </div>
 
@@ -201,7 +196,7 @@
 
         </div>
       </div>
-      <div class="card-body"  id="CardmventasPorMesero" >
+      <div class="card-body"  id="CardServiciosPorSala" >
         <canvas id="tratamientoSala" class="canvas-chart" ></canvas>
       </div>
     </div>
@@ -214,8 +209,8 @@
 
         </div>
       </div>
-      <div class="card-body"  id="CardmventasPorMesero" >
-        <canvas id="sociosPorClase" class="canvas-chart" ></canvas>
+      <div class="card-body"  id="CardServiciosPorEmpleado" >
+        <canvas id="serviciosPorEmpleado" class="canvas-chart" ></canvas>
       </div>
     </div>
   </div>
