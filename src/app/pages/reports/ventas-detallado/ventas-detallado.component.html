@@ -38,15 +38,6 @@
       </div>
 
       <div class="form-floating buscador-ticket">
-        <select (change)="cambioSucusal($event)" class="form-select box-shadow-rojo borde-rojo" id="floatingSelect" aria-label="Floating label select example">
-          @for (item of sucursales; track $index) {
-            <option value="{{item.sucursal}}">{{item.empresa}} </option>
-          }
-        </select>
-        <label for="floatingSelect">Selecciona Sucursal</label>
-      </div>
-
-      <div class="form-floating buscador-ticket">
         <select (change)="cambioCajero($event)"  class="form-select box-shadow-rojo borde-rojo" id="floatingSelect2" aria-label="Floating label select example">
           <option value="0" [selected]="!cajero">TODOS</option>
           @for (item of cajeros; track $index) {
