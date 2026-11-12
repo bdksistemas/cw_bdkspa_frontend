@@ -231,11 +231,9 @@ export class ApiServiceService  {
     return this.http.post(`${this.dominio}${url}`, data, {headers: this.httpOptions})
   }
 
-  getVentasCredito($fechaInicial:any =null, $fechaFinal:any =null, $sucursal: number = sucursalInicial(), $usuario: string = localStorage.getItem('id_usuario')!){
+  getVentasCredito($sucursal: number = sucursalInicial(), $usuario: string = localStorage.getItem('id_usuario')!){
     let url = 'rventas/getVentasCredito'
     let data = {
-      'fecha_inicial': $fechaInicial,
-      'fecha_final': $fechaFinal,
       'id_usuario': $usuario,
       'sucursal': $sucursal,
 

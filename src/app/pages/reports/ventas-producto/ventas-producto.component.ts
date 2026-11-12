@@ -42,13 +42,13 @@ export class VentasProductoComponent {
     'CantidadVendida',
     'PrecioVenta',
     'DescuentoVenta',
+    'Isr',
     'Impuestos',
     'ImporteVenta',
     'CostoVenta',
-    'Ganancia',
+    'ImporteCosto',
     'Comision',
-    'ImporteTotal',
-
+    'Ganancia',
   ];
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
 

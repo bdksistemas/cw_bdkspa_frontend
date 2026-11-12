@@ -99,16 +99,22 @@
         <td mat-cell *matCellDef="let row"> {{ row.Impuestos  | currency }} </td>
         <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('Impuestos') | currency }} </td>
       </ng-container>
-      <ng-container matColumnDef="ImporteTotal">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Importe Total</th>
-        <td mat-cell *matCellDef="let row"> {{ row.ImporteTotal  | currency }} </td>
-        <td mat-footer-cell *matFooterCellDef> {{getTotalCost('ImporteTotal') | currency}} </td>
+      <ng-container matColumnDef="Isr">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ISR</th>
+        <td mat-cell *matCellDef="let row"> {{ row.Isr  | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('Isr') | currency }} </td>
       </ng-container>
 
       <ng-container matColumnDef="CostoVenta">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Costo Venta</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Pr. Costo</th>
         <td mat-cell *matCellDef="let row"> {{ row.CostoVenta  | currency }} </td>
-        <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('CostoVenta') | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ImporteCosto">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Importe Costo</th>
+        <td mat-cell *matCellDef="let row"> {{ row.ImporteCosto  | currency }} </td>
+        <td mat-footer-cell *matFooterCellDef> {{ getTotalCost('ImporteCosto') | currency }} </td>
       </ng-container>
 
 
